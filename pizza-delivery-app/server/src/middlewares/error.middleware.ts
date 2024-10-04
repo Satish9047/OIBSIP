@@ -17,6 +17,7 @@ const errorHandler = (
 ) => {
   if (error instanceof ApiError) {
     return res.status(error.status).json({
+      status: error.status,
       success: error.success,
       message: error.message,
       data: null,
