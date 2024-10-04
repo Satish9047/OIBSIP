@@ -13,8 +13,16 @@ export const signUpHandler = asyncHandler(
 
 export const signInHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const { userInfo, token } = await authServices.signInService(req.body);
-    res.cookie("token", token, {
+    const { userInfo, accessToken, refreshToken } =
+      await authServices.signInService(req.body);
+    //ACCESS TOKEN
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    //REFRESH TOKEN
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",

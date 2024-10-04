@@ -28,12 +28,19 @@ export const signInService = async (signInData: ISignIn) => {
   }
   const { password, ...userInfo } = user.toObject();
 
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     { id: user._id, email: user.email },
     appConfig.jwtSecret,
     {
       expiresIn: "1min",
     }
   );
-  return { userInfo, token };
+  const refreshToken = jwt.sign(
+    { id: user._id, email: user.email },
+    appConfig.jwtSecret,
+    {
+      expiresIn: "1d",
+    }
+  );
+  return { userInfo, accessToken, refreshToken };
 };
