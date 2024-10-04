@@ -13,7 +13,12 @@ export const signUpHandler = asyncHandler(
 
 export const signInHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await authServices.signInService(req.body);
-    res.json(new ApiResponse(200, "User sign in successfully", data));
+    const { userInfo, token } = await authServices.signInService(req.body);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    res.json(new ApiResponse(200, "User sign in successfully", userInfo));
   }
 );

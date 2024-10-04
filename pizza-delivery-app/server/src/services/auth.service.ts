@@ -1,6 +1,8 @@
+import jwt from "jsonwebtoken";
 import { User } from "../models/user.model";
-import { ISignIn, IUser } from "../interface/app.interface";
 import { ApiError } from "../utils/apiResponse";
+import { appConfig } from "../configs/app.config";
+import { ISignIn, IUser } from "../interface/app.interface";
 
 export const signUpService = async (signUpData: IUser) => {
   const userExist = await User.findOne({ email: signUpData.email });
@@ -25,5 +27,13 @@ export const signInService = async (signInData: ISignIn) => {
     throw new ApiError(400, "Invalid password");
   }
   const { password, ...userInfo } = user.toObject();
-  return userInfo;
+
+  const token = jwt.sign(
+    { id: user._id, email: user.email },
+    appConfig.jwtSecret,
+    {
+      expiresIn: "1min",
+    }
+  );
+  return { userInfo, token };
 };
