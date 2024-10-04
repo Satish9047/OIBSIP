@@ -7,6 +7,6 @@ export interface IUser {
   role: string;
   isVerified: boolean;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
