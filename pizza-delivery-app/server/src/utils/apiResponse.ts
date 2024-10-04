@@ -6,15 +6,15 @@
  * @returns         {ApiResponse}
  */
 export class ApiResponse<T> {
-  httpStatus: number;
+  status: number;
   message: string;
   data: T;
   success: boolean;
-  constructor(httpStatus: number, message: string, data: T) {
-    this.httpStatus = httpStatus;
+  constructor(status: number, message: string, data: T) {
+    this.status = status;
     this.message = message;
     this.data = data;
-    this.success = httpStatus >= 200 && httpStatus < 300;
+    this.success = status >= 200 && status < 300;
   }
 }
 
