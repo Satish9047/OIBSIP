@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-interface AppConfig {
+interface IAppConfig {
   port: string;
   saltRound: number;
   mongodbUrl: string;
 }
 
-export const appConfig: AppConfig = {
+export const appConfig: IAppConfig = {
   port: process.env.PORT || "3000",
   saltRound: 10,
   mongodbUrl:
