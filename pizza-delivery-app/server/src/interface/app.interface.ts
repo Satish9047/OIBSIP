@@ -10,3 +10,8 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ISignIn {
+  email: string;
+  password: string;
+}
