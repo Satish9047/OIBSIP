@@ -3,10 +3,18 @@ import { Request, Response } from "express";
 import { ApiResponse } from "../utils/apiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import * as authServices from "../services/auth.service";
+import { sendMail } from "../utils/nodemailer";
+import { getRandomNumber } from "../utils/randomNumber";
 
 export const signUpHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await authServices.signUpService(req.body);
+    const verificationCode = getRandomNumber();
+    await sendMail(
+      data.email,
+      "Verification Email to Pizza Lovers",
+      `Hi, ${data.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
+    );
     res.json(new ApiResponse(201, "User created successfully", data));
   }
 );
