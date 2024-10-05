@@ -6,6 +6,8 @@ interface IAppConfig {
   saltRound: number;
   jwtSecret: string;
   mongodbUrl: string;
+  email: string;
+  password: string;
 }
 
 export const appConfig: IAppConfig = {
@@ -15,4 +17,6 @@ export const appConfig: IAppConfig = {
   mongodbUrl:
     `${process.env.MONGODB_URL}/pizza-app` ||
     "mongodb://localhost:27017/pizza-app",
+  email: process.env.EMAIL || "",
+  password: process.env.PASSWORD || "",
 };
