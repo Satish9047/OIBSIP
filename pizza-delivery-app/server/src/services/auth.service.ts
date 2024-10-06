@@ -1,8 +1,7 @@
-import jwt from "jsonwebtoken";
 import { User } from "../models/user.model";
 import { ApiError } from "../utils/apiResponse";
-import { appConfig } from "../configs/app.config";
 import { ISignIn, IUser } from "../interface/app.interface";
+import { createJwtToken } from "../utils/jwtToken";
 
 export const signUpService = async (signUpData: IUser) => {
   const userExist = await User.findOne({ email: signUpData.email });
@@ -11,7 +10,11 @@ export const signUpService = async (signUpData: IUser) => {
   }
   const user = await User.create(signUpData);
   const { password, ...userInfo } = user.toObject();
-  return userInfo;
+  const { accessToken, refreshToken } = createJwtToken(
+    userInfo._id.toString(),
+    userInfo.email
+  );
+  return { userInfo, accessToken, refreshToken };
 };
 
 export const signInService = async (signInData: ISignIn) => {
@@ -27,20 +30,9 @@ export const signInService = async (signInData: ISignIn) => {
     throw new ApiError(400, "Invalid password");
   }
   const { password, ...userInfo } = user.toObject();
-
-  const accessToken = jwt.sign(
-    { id: user._id, email: user.email },
-    appConfig.jwtSecret,
-    {
-      expiresIn: "1min",
-    }
-  );
-  const refreshToken = jwt.sign(
-    { id: user._id, email: user.email },
-    appConfig.jwtSecret,
-    {
-      expiresIn: "1d",
-    }
+  const { accessToken, refreshToken } = createJwtToken(
+    userInfo._id.toString(),
+    userInfo.email
   );
   return { userInfo, accessToken, refreshToken };
 };

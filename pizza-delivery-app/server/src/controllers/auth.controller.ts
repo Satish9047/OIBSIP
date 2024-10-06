@@ -8,14 +8,27 @@ import { getRandomNumber } from "../utils/randomNumber";
 
 export const signUpHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await authServices.signUpService(req.body);
+    const { userInfo, accessToken, refreshToken } =
+      await authServices.signUpService(req.body);
     const verificationCode = getRandomNumber();
     await sendMail(
-      data.email,
+      userInfo.email,
       "Verification Email to Pizza Lovers",
-      `Hi, ${data.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
+      `Hi, ${userInfo.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
     );
-    res.json(new ApiResponse(201, "User created successfully", data));
+    //ACCESS TOKEN
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    //REFRESH TOKEN
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    res.json(new ApiResponse(201, "User created successfully", userInfo));
   }
 );
 
