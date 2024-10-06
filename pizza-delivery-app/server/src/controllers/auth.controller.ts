@@ -31,7 +31,7 @@ export const signUpHandler = asyncHandler(
       sameSite: "none",
       path: "/api/auth/refresh-token",
     });
-    res.json(new ApiResponse(201, "User created successfully", userInfo));
+    res.json(new ApiResponse(201, "User created successful", userInfo));
   }
 );
 
@@ -51,7 +51,7 @@ export const signInHandler = asyncHandler(
       secure: true,
       sameSite: "none",
     });
-    res.json(new ApiResponse(200, "User sign in successfully", userInfo));
+    res.json(new ApiResponse(200, "User sign in successful", userInfo));
   }
 );
 
@@ -69,7 +69,7 @@ export const verificationHandler = asyncHandler(
     if (!data) {
       throw new ApiError(400, "Invalid verification code");
     }
-    res.json(new ApiResponse(200, "User verified successfully"));
+    res.json(new ApiResponse(200, "User verified successful"));
   }
 );
 
@@ -90,6 +90,18 @@ export const refreshTokenHandler = asyncHandler(
       path: "/",
     });
 
-    res.json(new ApiResponse(200, "Token refreshed successfully", userInfo));
+    res.json(new ApiResponse(200, "Token refreshed successful", userInfo));
+  }
+);
+
+export const logoutHandler = asyncHandler(
+  async (req: Request & { user?: JwtPayload }, res: Response) => {
+    const user = req.user;
+    if (!user) {
+      throw new ApiError(401, "Unauthorized Request");
+    }
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.json(new ApiResponse(200, "User logged out successful"));
   }
 );
