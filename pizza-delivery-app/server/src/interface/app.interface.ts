@@ -5,6 +5,7 @@ export interface IUser {
   phone: string;
   address: string;
   role?: string;
+  verificationToken?: number;
   isVerified?: boolean;
   password: string;
   createdAt?: Date;
@@ -14,4 +15,9 @@ export interface IUser {
 export interface ISignIn {
   email: string;
   password: string;
+}
+
+export interface JwtUser {
+  id: string;
+  email: string;
 }
