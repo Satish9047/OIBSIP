@@ -3,7 +3,7 @@ import { appConfig } from "../configs/app.config";
 
 export const createJwtToken = (id: string, email: string) => {
   const accessToken = jwt.sign({ id, email }, appConfig.jwtSecret, {
-    expiresIn: "1min",
+    expiresIn: "10min",
   });
   const refreshToken = jwt.sign({ id, email }, appConfig.jwtSecret, {
     expiresIn: "1d",
