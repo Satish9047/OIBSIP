@@ -10,3 +10,10 @@ export const createJwtToken = (id: string, email: string) => {
   });
   return { accessToken, refreshToken };
 };
+
+export const createAccessToken = (id: string, email: string) => {
+  const accessToken = jwt.sign({ id, email }, appConfig.jwtSecret, {
+    expiresIn: "10min",
+  });
+  return accessToken;
+};
