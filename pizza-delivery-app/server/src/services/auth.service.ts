@@ -1,7 +1,7 @@
 import { User } from "../models/user.model";
 import { ApiError } from "../utils/apiResponse";
 import { ISignIn, IUser } from "../interface/app.interface";
-import { createJwtToken } from "../utils/jwtToken";
+import { createAccessToken, createJwtToken } from "../utils/jwtToken";
 
 export const signUpService = async (
   signUpData: IUser,
@@ -51,4 +51,17 @@ export const userVerificationService = async (email: String, token: number) => {
   }
   const user = await User.findOneAndUpdate({ email }, { isVerified: true });
   return user;
+};
+
+export const refreshTokenService = async (email: string) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const { password, ...userInfo } = user.toObject();
+  const accessToken = createAccessToken(
+    userInfo._id.toString(),
+    userInfo.email
+  );
+  return { userInfo, accessToken };
 };
