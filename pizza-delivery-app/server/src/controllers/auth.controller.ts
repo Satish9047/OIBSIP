@@ -58,7 +58,7 @@ export const signInHandler = asyncHandler(
 export const verificationHandler = asyncHandler(
   async (req: Request & { user?: JwtPayload }, res: Response) => {
     const { verificationCode } = req.body;
-    const user = req.user; //
+    const user = req.user;
     if (!user) {
       throw new ApiError(401, "Unauthorized access");
     }
@@ -70,5 +70,26 @@ export const verificationHandler = asyncHandler(
       throw new ApiError(400, "Invalid verification code");
     }
     res.json(new ApiResponse(200, "User verified successfully"));
+  }
+);
+
+export const refreshTokenHandler = asyncHandler(
+  async (req: Request & { user?: JwtPayload }, res: Response) => {
+    const user = req.user;
+    if (!user) {
+      throw new ApiError(401, "Unauthorized access");
+    }
+    const { userInfo, accessToken } = await authServices.refreshTokenService(
+      user.email
+    );
+    //ACCESS TOKEN
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      path: "/",
+    });
+
+    res.json(new ApiResponse(200, "Token refreshed successfully", userInfo));
   }
 );
