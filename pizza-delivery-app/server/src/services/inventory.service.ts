@@ -109,6 +109,24 @@ const updateNonVegService = async (id: string, quantity: number) => {
   return nonVeg;
 };
 
+const getAllRecipeService = async () => {
+  const pizzaBase = await PizzaBase.find();
+  const sauce = await Sauce.find();
+  const cheese = await Cheese.find();
+  const veggies = await Veggies.find();
+  const nonVeg = await NonVeg.find();
+  if (!pizzaBase || !sauce || !cheese || !veggies || !nonVeg) {
+    throw new Error("Recipe not found");
+  }
+  return {
+    pizzaBase,
+    sauce,
+    cheese,
+    veggies,
+    nonVeg,
+  };
+};
+
 export {
   addPizzaBaseService,
   updatePizzaBaseService,
@@ -120,4 +138,5 @@ export {
   updateVeggiesService,
   addNonVegService,
   updateNonVegService,
+  getAllRecipeService,
 };
