@@ -1,3 +1,10 @@
+import { Cheese } from "../models/cheese.model";
+import { NonVeg } from "../models/nonVeg.model";
+import { PizzaBase } from "../models/pizzaBase.model";
+import { Sauce } from "../models/sauce.model";
+import { User } from "../models/user.model";
+import { Veggies } from "../models/veggies.model";
+
 export interface IUser {
   _id?: string;
   name: string;
@@ -20,4 +27,19 @@ export interface ISignIn {
 export interface JwtUser {
   id: string;
   email: string;
+}
+
+export interface Pizza {
+  User: typeof User;
+  pizzaBase: typeof PizzaBase;
+  sauceType: typeof Sauce;
+  cheeseType: typeof Cheese;
+  veggies: typeof Veggies;
+  nonVeg: typeof NonVeg;
+  quantity: number;
+  isDelivered: boolean;
+  paid?: boolean;
+  price?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
