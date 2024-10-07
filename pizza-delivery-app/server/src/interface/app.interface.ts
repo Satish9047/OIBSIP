@@ -30,7 +30,7 @@ export interface JwtUser {
 }
 
 export interface Pizza {
-  User: typeof User;
+  user: typeof User;
   pizzaBase: typeof PizzaBase;
   sauceType: typeof Sauce;
   cheeseType: typeof Cheese;
