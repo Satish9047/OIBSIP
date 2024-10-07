@@ -11,11 +11,12 @@ import {
   updateVeggiesHandler,
   addNonVegHandler,
   updateNonVegHandler,
+  getAllRecipeHandler,
 } from "../controllers/inventory.controller";
 
 const inventoryRoute = Router();
 
-// inventoryRoute.get("/recipe", getAllRecipeHandler);
+inventoryRoute.get("/recipe", getAllRecipeHandler);
 // inventoryRoute.post("/recipe", createRecipeHandler);
 // inventoryRoute.put("/recipe", updateRecipeHandler);
 
