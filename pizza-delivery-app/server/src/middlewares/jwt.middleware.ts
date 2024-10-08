@@ -10,57 +10,96 @@ import { appConfig } from "../configs/app.config";
 import { JwtUser } from "../interface/app.interface";
 
 const verifyToken = async (
-  req: Request & { user?: JwtPayload },
+  req: Request & { user?: JwtUser },
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.accessToken;
+  const token = req.cookies?.accessToken;
+
   if (!token) {
-    throw new ApiError(401, "Unauthorized");
+    return next(new ApiError(401, "Unauthorized"));
   }
+
   try {
-    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
+    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload & {
+      id: string;
+      email: string;
+    };
+
     if (!decoded || !decoded.id || !decoded.email) {
-      throw new ApiError(401, "Invalid token");
+      return next(new ApiError(401, "Invalid token"));
     }
+
     req.user = decoded as JwtUser;
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
-      throw new ApiError(401, "Token expired");
+      return next(new ApiError(401, "Token expired"));
     } else if (error instanceof JsonWebTokenError) {
-      throw new ApiError(401, "Invalid token");
+      return next(new ApiError(401, "Invalid token"));
     } else {
-      throw new ApiError(500, "Internal server error");
+      return next(new ApiError(500, "Internal server error"));
     }
   }
 };
+
+export default verifyToken;
 
 const verifyRefreshToken = async (
   req: Request & { user?: JwtPayload },
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.refreshToken;
+  const token = req.cookies?.refreshToken;
   if (!token) {
-    throw new ApiError(401, "Unauthorized Request");
+    return next(new ApiError(401, "Unauthorized Request"));
   }
   try {
     const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
     if (!decoded || !decoded.id || !decoded.email) {
-      throw new ApiError(401, "Invalid token");
+      return next(new ApiError(401, "Invalid token"));
     }
     req.user = decoded as JwtUser;
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
-      throw new ApiError(401, "Token expired");
+      return next(new ApiError(401, "Token expired"));
     } else if (error instanceof JsonWebTokenError) {
-      throw new ApiError(401, "Invalid token");
+      return next(new ApiError(401, "Invalid token"));
     } else {
-      throw new ApiError(500, "Internal server error");
+      return next(new ApiError(500, "Internal server error"));
     }
   }
 };
 
-export { verifyToken, verifyRefreshToken };
+const verifyAdmin = async (
+  req: Request & { user?: JwtPayload },
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.accessToken;
+  if (!token) {
+    next(new ApiError(401, "Unauthorized Request"));
+  }
+  try {
+    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
+    if (!decoded || !decoded.id || !decoded.email) {
+      return next(new ApiError(401, "Invalid token"));
+    }
+    req.user = decoded as JwtUser;
+    if (req.user.role !== "admin") {
+      return next(new ApiError(401, "Unauthorized Request"));
+    }
+    next();
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      return next(new ApiError(401, "Token expired"));
+    } else if (error instanceof JsonWebTokenError) {
+      next(new ApiError(401, "Invalid token"));
+    } else {
+      return next(new ApiError(500, "Internal server error"));
+    }
+  }
+};
+
+export { verifyToken, verifyRefreshToken, verifyAdmin };
