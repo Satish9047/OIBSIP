@@ -16,7 +16,8 @@ export const signUpService = async (
   const { password, ...userInfo } = user.toObject();
   const { accessToken, refreshToken } = createJwtToken(
     userInfo._id.toString(),
-    userInfo.email
+    userInfo.email,
+    userInfo.role
   );
   return { userInfo, accessToken, refreshToken };
 };
@@ -36,7 +37,8 @@ export const signInService = async (signInData: ISignIn) => {
   const { password, ...userInfo } = user.toObject();
   const { accessToken, refreshToken } = createJwtToken(
     userInfo._id.toString(),
-    userInfo.email
+    userInfo.email,
+    userInfo.role
   );
   return { userInfo, accessToken, refreshToken };
 };
@@ -61,7 +63,8 @@ export const refreshTokenService = async (email: string) => {
   const { password, ...userInfo } = user.toObject();
   const accessToken = createAccessToken(
     userInfo._id.toString(),
-    userInfo.email
+    userInfo.email,
+    userInfo.role
   );
   return { userInfo, accessToken };
 };
