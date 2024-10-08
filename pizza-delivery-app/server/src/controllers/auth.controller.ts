@@ -40,7 +40,7 @@ export const signInHandler = asyncHandler(
     const { userInfo, accessToken, refreshToken } =
       await authServices.signInService(req.body);
     //ACCESS TOKEN
-    res.cookie("token", accessToken, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
