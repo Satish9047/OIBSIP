@@ -8,7 +8,6 @@ import { JwtUser } from "../interface/app.interface";
 
 export const getAllOrderHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    // console.log("from order:", req.body);
     const data = await orderServices.getAllOrderService();
     res.json(new ApiResponse(200, "Order fetched successful", data));
   }
@@ -16,7 +15,6 @@ export const getAllOrderHandler = asyncHandler(
 
 export const createOrderHandler = asyncHandler(
   async (req: Request & { user?: JwtUser }, res: Response) => {
-    // console.log("from order:", req.body);
     if (!req.user) {
       throw new ApiResponse(401, "Unauthorized");
     }
@@ -32,7 +30,7 @@ export const updateOrderHandler = asyncHandler(
       req.params.id,
       req.body
     );
-    res.json(new ApiResponse(200, "Order updated successful"));
+    res.json(new ApiResponse(200, "Order updated successful", data));
   }
 );
 
