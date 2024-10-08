@@ -31,12 +31,6 @@ const createOrderService = async (user: any, pizza: IOrder) => {
   });
   const nonVeg = await NonVeg.find({ _id: { $in: pizzaOrder.pizzaNonVegIds } });
 
-  console.log("pizzaOrder service1:", pizzaBase);
-  console.log("pizzaOrder service2:", sauce);
-  console.log("pizzaOrder service3:", cheese);
-  console.log("pizzaOrder service4:", veggies);
-  console.log("pizzaOrder service5:", nonVeg);
-
   if (!pizzaBase || !sauce || !cheese) {
     throw new ApiError(404, "Pizza component not found");
   }
