@@ -6,6 +6,7 @@ import { Sauce } from "../models/sauce.model";
 import { Cheese } from "../models/cheese.model";
 import { Veggies } from "../models/veggies.model";
 import { NonVeg } from "../models/nonVeg.model";
+import { decreaseQuantity } from "../utils/decreaseQuantity";
 
 const getAllOrderService = async () => {
   const data = await OrderPizza.find({})
@@ -33,6 +34,41 @@ const createOrderService = async (user: any, pizza: IOrder) => {
 
   if (!pizzaBase || !sauce || !cheese) {
     throw new ApiError(404, "Pizza component not found");
+  }
+
+  await decreaseQuantity(
+    PizzaBase,
+    pizzaOrder.pizzaBaseId,
+    pizza.quantity,
+    "Pizza Base"
+  );
+  await decreaseQuantity(
+    Sauce,
+    pizzaOrder.pizzaSauceId,
+    pizza.quantity,
+    "Sauce"
+  );
+  await decreaseQuantity(
+    Cheese,
+    pizzaOrder.pizzaCheeseId,
+    pizza.quantity,
+    "Cheese"
+  );
+
+  // Decrease the quantity for multiple veggies
+  const veggie = await Veggies.find({
+    _id: { $in: pizzaOrder.pizzaVeggiesIds },
+  });
+  for (const veg of veggie) {
+    await decreaseQuantity(Veggies, veg.id, pizza.quantity, veg.name);
+  }
+
+  // Decrease the quantity for multiple non-veg items
+  const nonVegs = await NonVeg.find({
+    _id: { $in: pizzaOrder.pizzaNonVegIds },
+  });
+  for (const meat of nonVegs) {
+    await decreaseQuantity(NonVeg, meat.id, pizza.quantity, meat.name);
   }
 
   let totalPrice = pizzaBase.price + sauce.price + cheese.price;
@@ -64,7 +100,7 @@ const createOrderService = async (user: any, pizza: IOrder) => {
   return order;
 };
 
-const updateOrderService = async (id: string, pizza: Pizza) => {
+const updateOrderDeliverService = async (id: string, pizza: Pizza) => {
   const order = await OrderPizza.findByIdAndUpdate(id, pizza);
   if (!order) {
     throw new ApiError(400, "Error while updating pizza order");
@@ -83,6 +119,6 @@ const deleteOrderService = async (id: string) => {
 export {
   getAllOrderService,
   createOrderService,
-  updateOrderService,
+  updateOrderDeliverService,
   deleteOrderService,
 };
