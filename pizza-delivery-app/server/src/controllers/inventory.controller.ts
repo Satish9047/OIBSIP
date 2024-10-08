@@ -13,10 +13,7 @@ export const addPizzaBaseHandler = asyncHandler(
 
 export const updatePizzaBaseHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await recipeService.updatePizzaBaseService(
-      req.params.id,
-      req.body
-    );
+    const data = await recipeService.updatePizzaBaseService(req.body);
     res.json(new ApiResponse(200, "Pizza base updated successfully", data));
   }
 );
@@ -30,10 +27,7 @@ export const addSauceHandler = asyncHandler(
 
 export const updateSauceHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await recipeService.updateSauceService(
-      req.params.id,
-      req.body
-    );
+    const data = await recipeService.updateSauceService(req.body);
     res.json(new ApiResponse(200, "Sauce updated successfully", data));
   }
 );
@@ -47,10 +41,7 @@ export const addCheeseHandler = asyncHandler(
 
 export const updateCheeseHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await recipeService.updateCheeseService(
-      req.params.id,
-      req.body
-    );
+    const data = await recipeService.updateCheeseService(req.body);
     res.json(new ApiResponse(200, "Cheese updated successfully", data));
   }
 );
@@ -64,10 +55,7 @@ export const addVeggiesHandler = asyncHandler(
 
 export const updateVeggiesHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await recipeService.updateVeggiesService(
-      req.params.id,
-      req.body
-    );
+    const data = await recipeService.updateVeggiesService(req.body);
     res.json(new ApiResponse(200, "Veggies updated successfully", data));
   }
 );
@@ -81,10 +69,7 @@ export const addNonVegHandler = asyncHandler(
 
 export const updateNonVegHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await recipeService.updateNonVegService(
-      req.params.id,
-      req.body
-    );
+    const data = await recipeService.updateNonVegService(req.body);
     res.json(new ApiResponse(200, "Non-veg updated successfully", data));
   }
 );
