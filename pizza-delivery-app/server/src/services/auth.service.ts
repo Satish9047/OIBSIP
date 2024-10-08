@@ -68,3 +68,19 @@ export const refreshTokenService = async (email: string) => {
   );
   return { userInfo, accessToken };
 };
+
+export const verifyAdminService = async (id: string) => {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return null;
+    }
+    if (user.role !== "admin") {
+      return null;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    return null;
+  }
+};
