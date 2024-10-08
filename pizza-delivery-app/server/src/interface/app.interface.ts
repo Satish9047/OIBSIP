@@ -43,3 +43,13 @@ export interface Pizza {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface IOrder {
+  pizzaBaseId: string;
+  pizzaSauceId: string;
+  pizzaCheeseId: string;
+  pizzaVeggiesIds: string;
+  pizzaNonVegIds: string;
+  quantity: number;
+  paid?: boolean;
+}
