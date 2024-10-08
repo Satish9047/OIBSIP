@@ -24,9 +24,9 @@ export const createOrderHandler = asyncHandler(
   }
 );
 
-export const updateOrderHandler = asyncHandler(
+export const updateOrderDeliverHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const data = await orderServices.updateOrderService(
+    const data = await orderServices.updateOrderDeliverService(
       req.params.id,
       req.body
     );
@@ -37,6 +37,6 @@ export const updateOrderHandler = asyncHandler(
 export const deleteOrderHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await orderServices.deleteOrderService(req.params.id);
-    res.json(new ApiResponse(200, "Order deleted successful"));
+    res.json(new ApiResponse(200, "Order deleted successful", data));
   }
 );
