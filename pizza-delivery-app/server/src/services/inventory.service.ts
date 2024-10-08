@@ -9,7 +9,13 @@ const addPizzaBaseService = async (data: typeof PizzaBase) => {
   return pizzaBase;
 };
 
-const updatePizzaBaseService = async (id: string, quantity: number) => {
+const updatePizzaBaseService = async ({
+  id,
+  quantity,
+}: {
+  id: number;
+  quantity: number;
+}) => {
   const base = await PizzaBase.findById(id);
   if (!base) {
     throw new Error("Pizza base not found");
@@ -30,7 +36,13 @@ const addSauceService = async (data: typeof Sauce) => {
   return sauce;
 };
 
-const updateSauceService = async (id: string, quantity: number) => {
+const updateSauceService = async ({
+  id,
+  quantity,
+}: {
+  id: number;
+  quantity: number;
+}) => {
   const sauceType = await Sauce.findById(id);
   if (!sauceType) {
     throw new Error("Sauce not found");
@@ -51,7 +63,13 @@ const addCheeseService = async (data: typeof Cheese) => {
   return cheese;
 };
 
-const updateCheeseService = async (id: string, quantity: number) => {
+const updateCheeseService = async ({
+  id,
+  quantity,
+}: {
+  id: number;
+  quantity: number;
+}) => {
   const cheeseType = await Cheese.findById(id);
   if (!cheeseType) {
     throw new Error("Cheese not found");
@@ -72,7 +90,13 @@ const addVeggiesService = async (data: typeof Veggies) => {
   return veggies;
 };
 
-const updateVeggiesService = async (id: string, quantity: number) => {
+const updateVeggiesService = async ({
+  id,
+  quantity,
+}: {
+  id: number;
+  quantity: number;
+}) => {
   const veggiesType = await Veggies.findById(id);
   if (!veggiesType) {
     throw new Error("Veggies not found");
@@ -93,7 +117,13 @@ const addNonVegService = async (data: typeof NonVeg) => {
   return nonVeg;
 };
 
-const updateNonVegService = async (id: string, quantity: number) => {
+const updateNonVegService = async ({
+  id,
+  quantity,
+}: {
+  id: number;
+  quantity: number;
+}) => {
   const nonVegType = await NonVeg.findById(id);
   if (!nonVegType) {
     throw new Error("Non-veg not found");
