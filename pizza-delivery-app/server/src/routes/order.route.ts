@@ -6,12 +6,13 @@ import {
   updateOrderHandler,
   deleteOrderHandler,
 } from "../controllers/order.controller";
+import { verifyToken, verifyAdmin } from "../middlewares/jwt.middleware";
 
 const orderRouter = Router();
 
-orderRouter.get("/", getAllOrderHandler);
-orderRouter.post("/", createOrderHandler);
-orderRouter.put("/:id", updateOrderHandler);
-orderRouter.delete("/:id", deleteOrderHandler);
+orderRouter.get("/", verifyAdmin, getAllOrderHandler);
+orderRouter.post("/", verifyToken, createOrderHandler);
+orderRouter.put("/:id", verifyAdmin, updateOrderHandler);
+orderRouter.delete("/:id", verifyAdmin, deleteOrderHandler);
 
 export { orderRouter };
