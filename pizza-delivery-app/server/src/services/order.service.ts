@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/apiResponse";
 import { OrderPizza } from "../models/order.model";
-import { IOrder, JwtUser, Pizza } from "../interface/app.interface";
+import { IOrder, Pizza } from "../interface/app.interface";
 import { PizzaBase } from "../models/pizzaBase.model";
 import { Sauce } from "../models/sauce.model";
 import { Cheese } from "../models/cheese.model";
@@ -23,10 +23,6 @@ const getAllOrderService = async () => {
 
 const createOrderService = async (user: any, pizza: IOrder) => {
   const pizzaOrder = { ...pizza, user: user.id };
-  // console.log("pizzaOrder service:", pizzaOrder);
-  // console.log("pizzaOrder service:", pizza);
-  // console.log("pizzaOrder service1:", pizzaOrder);
-  // Fetch the details of selected pizza components
   const pizzaBase = await PizzaBase.findById(pizzaOrder.pizzaBaseId);
   const sauce = await Sauce.findById(pizzaOrder.pizzaSauceId);
   const cheese = await Cheese.findById(pizzaOrder.pizzaCheeseId);
@@ -41,14 +37,11 @@ const createOrderService = async (user: any, pizza: IOrder) => {
   console.log("pizzaOrder service4:", veggies);
   console.log("pizzaOrder service5:", nonVeg);
 
-  // If any of the components are not found, throw an error
   if (!pizzaBase || !sauce || !cheese) {
     throw new ApiError(404, "Pizza component not found");
   }
 
-  // Calculate total price based on the components and quantity
   let totalPrice = pizzaBase.price + sauce.price + cheese.price;
-  console.log("totalPrice:", totalPrice);
   veggies.forEach((veggie) => {
     totalPrice += veggie.price;
   });
@@ -57,10 +50,8 @@ const createOrderService = async (user: any, pizza: IOrder) => {
     totalPrice += meat.price;
   });
 
-  // Multiply by quantity
   totalPrice *= pizza.quantity;
 
-  // Create the order
   const order = await OrderPizza.create({
     user: user.id,
     pizzaBase: pizzaOrder.pizzaBaseId,
@@ -72,7 +63,6 @@ const createOrderService = async (user: any, pizza: IOrder) => {
     price: totalPrice,
   });
 
-  console.log("from Order Service", order);
   if (!order) {
     throw new ApiError(400, "Failed to create pizza order");
   }
