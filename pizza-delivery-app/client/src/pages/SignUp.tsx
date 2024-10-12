@@ -1,22 +1,38 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../schema/signUpSchema";
+import { useSignUpMutation } from "../redux/apiServices";
+import { ISignUp } from "../interface/app.interface";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
+  const [signUp, { isLoading }] = useSignUpMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<ISignUp>({
     resolver: zodResolver(signUpSchema),
   });
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data: ISignUp) => {
+    try {
+      const signUpResponse = await signUp(data).unwrap();
+      console.log("Sign Up successful:", signUpResponse);
+    } catch (error: unknown) {
+      console.error("Sign Up failed:", error);
+
+      if (typeof error === "object" && error !== null && "message" in error) {
+        toast.error((error as { message: string }).message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+      reset();
+    }
   };
 
   return (
@@ -24,7 +40,11 @@ const SignUp = () => {
       <section className="w-full max-w-3xl p-8 rounded-lg shadow-md">
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold">Sign Up For Super Pizza</h1>
+          <div>
+            <ToastContainer />
+          </div>
         </div>
+
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-8 md:flex-row">
             <div className="md:w-1/2">
@@ -47,7 +67,7 @@ const SignUp = () => {
                   className=" border-stone-300 focus:outline-none focus:border-orange-500"
                 />
                 {errors?.name && (
-                  <p className="text-red-500">{`${errors.name.message}`}</p>
+                  <p className="text-red-500">{errors.name.message}</p>
                 )}
               </div>
               <div>
@@ -61,7 +81,7 @@ const SignUp = () => {
                     className=" border-stone-300 focus:outline-none focus:border-orange-500"
                   />
                   {errors?.email && (
-                    <p className="text-red-500">{`${errors.email.message}`}</p>
+                    <p className="text-red-500">{errors.email.message}</p>
                   )}
                 </div>
                 <div className="my-4">
@@ -74,7 +94,7 @@ const SignUp = () => {
                     className=" border-stone-300 focus:outline-none focus:border-orange-500"
                   />
                   {errors?.phone && (
-                    <p className="text-red-500">{`${errors.phone.message}`}</p>
+                    <p className="text-red-500">{errors.phone.message}</p>
                   )}
                 </div>
                 <div className="my-4">
@@ -87,7 +107,7 @@ const SignUp = () => {
                     className=" border-stone-300 focus:outline-none focus:border-orange-500"
                   />
                   {errors?.address && (
-                    <p className="text-red-500">{`${errors.address.message}`}</p>
+                    <p className="text-red-500">{errors.address.message}</p>
                   )}
                 </div>
                 <div className="my-4">
@@ -100,7 +120,7 @@ const SignUp = () => {
                     className=" border-stone-300 focus:outline-none focus:border-orange-500"
                   />
                   {errors?.password && (
-                    <p className="text-red-500">{`${errors.password.message}`}</p>
+                    <p className="text-red-500">{errors.password.message}</p>
                   )}
                 </div>
                 <div className="flex justify-between mt-6">
@@ -117,7 +137,7 @@ const SignUp = () => {
                     type="submit"
                     className="bg-orange-500 rounded-md hover:bg-orange-600"
                   >
-                    Sign Up
+                    {isLoading ? "Loading ..." : "Sign Up"}
                   </Button>
                 </div>
               </div>
@@ -129,3 +149,12 @@ const SignUp = () => {
   );
 };
 export default SignUp;
+
+// const errorMessage =
+//   apiError &&
+//   "data" in apiError &&
+//   typeof apiError.data === "object" &&
+//   apiError.data == null &&
+//   "message" in apiError
+//     ? (apiError.message as string)
+//     : null;
