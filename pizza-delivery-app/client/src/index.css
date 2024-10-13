@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-size: 10px;
+}
+h1 {
+  font-size: 1.6rem;
+}
+h2 {
+  font-size: 1.4rem;
+}
+h3 {
+  font-size: 1.2rem;
+}
+
+p {
+  font-size: 1rem;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
