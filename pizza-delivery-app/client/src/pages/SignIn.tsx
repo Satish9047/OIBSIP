@@ -1,9 +1,14 @@
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
 import { Link } from "react-router-dom";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "../schema/signInSchema";
+import { useSignInMutation } from "../redux/apiServices";
+import { ISignIn } from "../interface/app.interface";
 
 const SignIn = () => {
   const {
@@ -11,17 +16,32 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({ resolver: zodResolver(signInSchema) });
+  } = useForm<ISignIn>({ resolver: zodResolver(signInSchema) });
+  const [signIn, { isLoading }] = useSignInMutation();
 
-  const onSubmit = (formData: FieldValues) => {
+  const onSubmit = async (formData: ISignIn) => {
     console.log(formData);
-    reset();
+    try {
+      const signInResponse = await signIn(formData).unwrap();
+      console.log("Sign Up successful:", signInResponse);
+      toast.success(signInResponse.message);
+    } catch (error) {
+      console.error("Sign In failed:", error);
+
+      if (typeof error === "object" && error !== null && "message" in error) {
+        toast.error((error as { message: string }).message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
+      reset();
+    }
   };
   return (
     <main className="flex items-center justify-center min-h-screen">
       <section className="w-full max-w-3xl p-8 rounded-lg shadow-md">
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold">Sign In Into Super Pizza</h1>
+          <ToastContainer />
         </div>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-8 md:flex-row">
@@ -75,7 +95,7 @@ const SignIn = () => {
                   type="submit"
                   className="bg-orange-500 rounded-md hover:bg-orange-600 "
                 >
-                  Sign In
+                  {isLoading ? "Loading..." : "Sign In"}
                 </Button>
               </div>
             </div>
