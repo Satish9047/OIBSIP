@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
 import { useForm } from "react-hook-form";
+import "react-toastify/dist/ReactToastify.css";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ToastContainer, toast } from "react-toastify";
+
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import { ISignUp } from "../interface/app.interface";
 import { signUpSchema } from "../schema/signUpSchema";
 import { useSignUpMutation } from "../redux/apiServices";
-import { ISignUp } from "../interface/app.interface";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
   const [signUp, { isLoading }] = useSignUpMutation();
@@ -23,6 +24,7 @@ const SignUp = () => {
     try {
       const signUpResponse = await signUp(data).unwrap();
       console.log("Sign Up successful:", signUpResponse);
+      toast.success(signUpResponse.message);
     } catch (error: unknown) {
       console.error("Sign Up failed:", error);
 
