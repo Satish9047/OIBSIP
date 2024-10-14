@@ -1,21 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface IUser {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { IUser } from "../../interface/app.interface";
 
 const initialState: IUser = {
+  _id: "",
   name: "",
   email: "",
   phone: "",
   address: "",
+  role: "",
+  verificationToken: "",
+  isVerified: false,
   createdAt: "",
   updatedAt: "",
+  _v: 0,
 };
 
 export const userSlice = createSlice({
