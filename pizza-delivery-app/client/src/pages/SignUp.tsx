@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import "react-toastify/dist/ReactToastify.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -12,6 +13,7 @@ import { useSignUpMutation } from "../redux/apiServices";
 
 const SignUp = () => {
   const [signUp, { isLoading }] = useSignUpMutation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,6 +27,9 @@ const SignUp = () => {
       const signUpResponse = await signUp(data).unwrap();
       console.log("Sign Up successful:", signUpResponse);
       toast.success(signUpResponse.message);
+      if (signUpResponse.success) {
+        navigate("/validate");
+      }
     } catch (error: unknown) {
       console.error("Sign Up failed:", error);
 
