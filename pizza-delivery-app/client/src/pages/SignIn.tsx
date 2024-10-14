@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -18,12 +19,16 @@ const SignIn = () => {
     reset,
   } = useForm<ISignIn>({ resolver: zodResolver(signInSchema) });
   const [signIn, { isLoading }] = useSignInMutation();
+  const navigate = useNavigate();
 
   const onSubmit = async (formData: ISignIn) => {
     console.log(formData);
     try {
       const signInResponse = await signIn(formData).unwrap();
       console.log("Sign Up successful:", signInResponse);
+      if (signInResponse.success) {
+        navigate("/");
+      }
       toast.success(signInResponse.message);
     } catch (error) {
       console.error("Sign In failed:", error);
