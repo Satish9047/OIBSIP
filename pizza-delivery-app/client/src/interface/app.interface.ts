@@ -1,10 +1,15 @@
 export interface IUser {
+  _id: string;
   name: string;
   email: string;
   phone: string;
   address: string;
-  createdAt: Date;
-  updatedAt: Date;
+  role: string;
+  verificationToken: string;
+  isVerified: boolean;
+  _v: number;
+  createdAt: string;
+  updatedAt: string;
 }
 export interface ISignUp {
   name: string;
@@ -20,7 +25,7 @@ export interface ISignIn {
 }
 
 export interface IAuthResponse {
-  data: IUser | null;
+  data: IUser;
   message: string;
   status: number;
   success: boolean;
