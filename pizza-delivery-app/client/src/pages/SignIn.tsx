@@ -10,6 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "../schema/signInSchema";
 import { useSignInMutation } from "../redux/apiServices";
 import { ISignIn } from "../interface/app.interface";
+import { addUserState } from "../redux/state/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
 
 const SignIn = () => {
   const {
@@ -20,13 +23,15 @@ const SignIn = () => {
   } = useForm<ISignIn>({ resolver: zodResolver(signInSchema) });
   const [signIn, { isLoading }] = useSignInMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = async (formData: ISignIn) => {
     console.log(formData);
     try {
       const signInResponse = await signIn(formData).unwrap();
       console.log("Sign Up successful:", signInResponse);
-      if (signInResponse.success) {
+      if (signInResponse.success && signInResponse.data) {
+        dispatch(addUserState(signInResponse.data));
         navigate("/");
       }
       toast.success(signInResponse.message);
