@@ -13,6 +13,7 @@ export const apiServices = createApi({
         url: "/auth/sign-up",
         method: "POST",
         body: credentials,
+        credentials: "include",
       }),
       transformResponse: (response: IAuthResponse) => response,
       transformErrorResponse: (error: {
@@ -25,6 +26,19 @@ export const apiServices = createApi({
         url: "/auth/sign-in",
         method: "POST",
         body: credentials,
+        credentials: "include",
+      }),
+      transformResponse: (response: IAuthResponse) => response,
+      transformErrorResponse: (error: {
+        status: number;
+        data: IAuthResponse;
+      }) => error.data,
+    }),
+    getMe: builder.query({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+        credentials: "include",
       }),
       transformResponse: (response: IAuthResponse) => response,
       transformErrorResponse: (error: {
@@ -35,4 +49,5 @@ export const apiServices = createApi({
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation } = apiServices;
+export const { useSignUpMutation, useSignInMutation, useGetMeQuery } =
+  apiServices;
