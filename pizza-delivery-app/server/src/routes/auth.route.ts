@@ -6,6 +6,7 @@ import {
   verificationHandler,
   refreshTokenHandler,
   logoutHandler,
+  getMeHandler,
 } from "../controllers/auth.controller";
 import { verifyToken } from "../middlewares/jwt.middleware";
 import { signInSchema, signUpSchema } from "../schema/user.schema";
@@ -15,6 +16,7 @@ const authRouter = Router();
 
 authRouter.post("/sign-up", validateData(signUpSchema), signUpHandler);
 authRouter.post("/sign-in", validateData(signInSchema), signInHandler);
+authRouter.get("/me", verifyToken, getMeHandler);
 authRouter.post("/verify-user", verifyToken, verificationHandler);
 authRouter.get("/refresh-token", refreshTokenHandler);
 authRouter.get("/logout", verifyToken, logoutHandler);

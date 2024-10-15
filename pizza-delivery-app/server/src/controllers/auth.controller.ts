@@ -6,6 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import { getRandomNumber } from "../utils/randomNumber";
 import * as authServices from "../services/auth.service";
 import { JwtPayload } from "jsonwebtoken";
+import { JwtUser } from "../interface/app.interface";
 
 export const signUpHandler = asyncHandler(
   async (req: Request, res: Response) => {
@@ -42,14 +43,12 @@ export const signInHandler = asyncHandler(
     //ACCESS TOKEN
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
     });
     //REFRESH TOKEN
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
     });
     res.json(new ApiResponse(200, "User sign in successful", userInfo));
   }
@@ -86,16 +85,24 @@ export const refreshTokenHandler = asyncHandler(
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "none",
-      secure: true,
-      path: "/",
+      secure: false,
     });
 
     res.json(new ApiResponse(200, "Token refreshed successful", userInfo));
   }
 );
 
+export const getMeHandler = asyncHandler(
+  async (req: Request & { user?: JwtUser }, res: Response) => {
+    if (req.user) {
+      res.json(new ApiResponse(200, "Valid User"));
+    }
+    throw new ApiError(404, "Invalid user request");
+  }
+);
+
 export const logoutHandler = asyncHandler(
-  async (req: Request & { user?: JwtPayload }, res: Response) => {
+  async (req: Request & { user?: JwtUser }, res: Response) => {
     const user = req.user;
     if (!user) {
       throw new ApiError(401, "Unauthorized Request");
