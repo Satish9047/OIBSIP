@@ -30,3 +30,10 @@ export interface IAuthResponse {
   status: number;
   success: boolean;
 }
+
+export interface IResponse {
+  data: unknown;
+  message: string;
+  status: number;
+  success: boolean;
+}
