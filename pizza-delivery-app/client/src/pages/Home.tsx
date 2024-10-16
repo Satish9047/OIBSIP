@@ -1,8 +1,10 @@
+import Landing from "../components/Landing";
+
 const Home = () => {
   return (
-    <div>
-      <h1>Welcome Pizza Lovers</h1>
-    </div>
+    <>
+      <Landing />
+    </>
   );
 };
 
