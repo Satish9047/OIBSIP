@@ -1,12 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { IAuthResponse, ISignIn, ISignUp } from "../interface/app.interface";
+import { baseQueryWithAuth } from "../utils/fetchBaseQuery";
 
 //Slice
 export const apiServices = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api/v1",
-  }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     signUp: builder.mutation<IAuthResponse, ISignUp>({
       query: (credentials) => ({
