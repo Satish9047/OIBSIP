@@ -16,13 +16,17 @@ const verifyToken = async (
   next: NextFunction
 ) => {
   const token = req.cookies?.accessToken;
+  console.log("token", req.cookies);
 
   if (!token) {
     return next(new ApiError(401, "Unauthorized"));
   }
 
   try {
-    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload & {
+    const decoded = jwt.verify(
+      token,
+      appConfig.accessJwtSecret
+    ) as JwtPayload & {
       id: string;
       email: string;
     };
@@ -51,12 +55,13 @@ const verifyRefreshToken = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("token", req.cookies.refreshToken);
   const token = req.cookies?.refreshToken;
   if (!token) {
     return next(new ApiError(401, "Unauthorized Request"));
   }
   try {
-    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
+    const decoded = jwt.verify(token, appConfig.refreshJwtSecret) as JwtPayload;
     if (!decoded || !decoded.id || !decoded.email) {
       return next(new ApiError(401, "Invalid token"));
     }
@@ -83,7 +88,7 @@ const verifyAdmin = async (
     next(new ApiError(401, "Unauthorized Request"));
   }
   try {
-    const decoded = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
+    const decoded = jwt.verify(token, appConfig.accessJwtSecret) as JwtPayload;
     if (!decoded || !decoded.id || !decoded.email) {
       return next(new ApiError(401, "Invalid token"));
     }
