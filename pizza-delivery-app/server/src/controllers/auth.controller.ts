@@ -9,6 +9,11 @@ import { JwtPayload } from "jsonwebtoken";
 import { JwtUser } from "../interface/app.interface";
 import { appConfig } from "../configs/app.config";
 
+/**
+ * @desc          Sign up a new user
+ * @route         POST /api/v1/auth/signup
+ * @access        Public
+ */
 export const signUpHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const verificationCode = getRandomNumber();
@@ -39,6 +44,11 @@ export const signUpHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Sign in a user
+ * @route         POST /api/v1/auth/sign-in
+ * @access        Public
+ */
 export const signInHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const { userInfo, accessToken, refreshToken } =
@@ -61,6 +71,11 @@ export const signInHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Verify user
+ * @route         POST /api/v1/auth/verify-user
+ * @access        User | Admin after Sign Up
+ */
 export const verificationHandler = asyncHandler(
   async (req: Request & { user?: JwtPayload }, res: Response) => {
     const { verificationCode } = req.body;
@@ -79,6 +94,11 @@ export const verificationHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Refresh token
+ * @route         POST /api/v1/auth/refresh-token
+ * @access        User | Admin
+ */
 export const refreshTokenHandler = asyncHandler(
   async (req: Request & { user?: JwtPayload }, res: Response) => {
     const user = req.user;
@@ -101,6 +121,11 @@ export const refreshTokenHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Get user data
+ * @route         GET /api/v1/auth/me
+ * @access        User | Admin
+ */
 export const getMeHandler = asyncHandler(
   async (req: Request & { user?: JwtUser }, res: Response) => {
     if (req.user) {
@@ -110,6 +135,11 @@ export const getMeHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Logout user
+ * @route         GET /api/v1/auth/logout
+ * @access        User | Admin
+ */
 export const logoutHandler = asyncHandler(
   async (req: Request & { user?: JwtUser }, res: Response) => {
     const user = req.user;
