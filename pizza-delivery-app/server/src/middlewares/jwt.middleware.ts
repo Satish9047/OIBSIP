@@ -16,7 +16,6 @@ const verifyToken = async (
   next: NextFunction
 ) => {
   const token = req.cookies?.accessToken;
-  console.log("token", req.cookies);
 
   if (!token) {
     return next(new ApiError(401, "Unauthorized"));
@@ -55,7 +54,6 @@ const verifyRefreshToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("token", req.cookies.refreshToken);
   const token = req.cookies?.refreshToken;
   if (!token) {
     return next(new ApiError(401, "Unauthorized Request"));
