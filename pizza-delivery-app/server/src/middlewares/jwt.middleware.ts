@@ -8,7 +8,6 @@ import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/apiResponse";
 import { appConfig } from "../configs/app.config";
 import { JwtUser } from "../interface/app.interface";
-import { verifyAdminService } from "../services/auth.service";
 
 const verifyToken = async (
   req: Request & { user?: JwtUser },
@@ -50,7 +49,7 @@ const verifyToken = async (
 export default verifyToken;
 
 const verifyRefreshToken = async (
-  req: Request & { user?: JwtPayload },
+  req: Request & { user?: JwtUser },
   res: Response,
   next: NextFunction
 ) => {
@@ -77,7 +76,7 @@ const verifyRefreshToken = async (
 };
 
 const verifyAdmin = async (
-  req: Request & { user?: JwtPayload },
+  req: Request & { user?: JwtUser },
   res: Response,
   next: NextFunction
 ) => {
@@ -91,10 +90,6 @@ const verifyAdmin = async (
       return next(new ApiError(401, "Invalid token"));
     }
     req.user = decoded as JwtUser;
-    const user = await verifyAdminService(decoded.id);
-    if (!user) {
-      return next(new ApiError(401, "Unauthorized Request"));
-    }
     next();
   } catch (error) {
     if (error instanceof TokenExpiredError) {
