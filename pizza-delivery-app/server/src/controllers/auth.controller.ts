@@ -7,6 +7,7 @@ import { getRandomNumber } from "../utils/randomNumber";
 import * as authServices from "../services/auth.service";
 import { JwtPayload } from "jsonwebtoken";
 import { JwtUser } from "../interface/app.interface";
+import { appConfig } from "../configs/app.config";
 
 export const signUpHandler = asyncHandler(
   async (req: Request, res: Response) => {
@@ -21,16 +22,18 @@ export const signUpHandler = asyncHandler(
     //ACCESS TOKEN
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: appConfig.env === "production",
       sameSite: "none",
       path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 10),
     });
     //REFRESH TOKEN
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: appConfig.env === "production",
       sameSite: "none",
       path: "/api/auth/refresh-token",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     res.json(new ApiResponse(201, "User created successful", userInfo));
   }
@@ -43,12 +46,16 @@ export const signInHandler = asyncHandler(
     //ACCESS TOKEN
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: appConfig.env === "production",
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 10),
     });
     //REFRESH TOKEN
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: appConfig.env === "production",
+      path: "/api/v1/auth/refresh-token",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     res.json(new ApiResponse(200, "User sign in successful", userInfo));
   }
@@ -85,7 +92,9 @@ export const refreshTokenHandler = asyncHandler(
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "none",
-      secure: false,
+      secure: appConfig.env === "production",
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 10),
     });
 
     res.json(new ApiResponse(200, "Token refreshed successful", userInfo));
