@@ -4,19 +4,44 @@ dotenv.config();
 interface IAppConfig {
   port: string;
   saltRound: number;
-  jwtSecret: string;
+  accessJwtSecret: string;
+  refreshJwtSecret: string;
   mongodbUrl: string;
   email: string;
   password: string;
+  accessTokenExpiry: string;
+  refreshTokenExpiry: string;
+  accessTokenCookieExpiry: number;
+  refreshCookieExpiry: number;
+  env: string;
 }
 
 export const appConfig: IAppConfig = {
-  port: process.env.PORT || "3000",
-  saltRound: 10,
-  jwtSecret: process.env.JWT_SECRET as string,
+  // MongoDB
   mongodbUrl:
     `${process.env.MONGODB_URL}/pizza-app` ||
     "mongodb://localhost:27017/pizza-app",
+
+  // APP
+  port: process.env.PORT || "3000",
+
+  // BCRYPT
+  saltRound: 10,
+
+  // JWT
+  accessJwtSecret: process.env.ACCESS_JWT_SECRET as string,
+  refreshJwtSecret: process.env.REFRESH_JWT_SECRET as string,
+  accessTokenExpiry: "10m",
+  refreshTokenExpiry: "1d",
+
+  // Nodemailer
   email: process.env.EMAIL || "",
   password: process.env.PASSWORD || "",
+
+  // Cookie Expiry
+  accessTokenCookieExpiry: 1000 * 60 * 10,
+  refreshCookieExpiry: 1000 * 60 * 60 * 24,
+
+  // Environment
+  env: process.env.NODE_ENV || "development",
 };
