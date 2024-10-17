@@ -6,6 +6,11 @@ import * as userServices from "../services/user.service";
 import { JwtPayload } from "jsonwebtoken";
 import { ApiError } from "../utils/apiResponse";
 
+/**
+ * @desc          Get user details
+ * @route         GET /users/me
+ * @access        Private
+ */
 export const getUserHandler = asyncHandler(
   async (
     req: Request & { user?: { id: string; email: string; role: string } },

@@ -3,9 +3,13 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import * as orderServices from "../services/order.service";
 import { ApiResponse } from "../utils/apiResponse";
-import { JwtPayload } from "jsonwebtoken";
 import { JwtUser } from "../interface/app.interface";
 
+/**
+ * @desc          Get all order
+ * @route         GET /api/v1/order
+ * @access        Admin
+ */
 export const getAllOrderHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await orderServices.getAllOrderService();
@@ -13,6 +17,11 @@ export const getAllOrderHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Create Pizza Order
+ * @route         POST /api/v1/order
+ * @access        User
+ */
 export const createOrderHandler = asyncHandler(
   async (req: Request & { user?: JwtUser }, res: Response) => {
     if (!req.user) {
@@ -24,6 +33,11 @@ export const createOrderHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update order by id
+ * @route         PUT /api/v1/order/:id
+ * @access        Admin
+ */
 export const updateOrderDeliverHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await orderServices.updateOrderDeliverService(
@@ -34,6 +48,11 @@ export const updateOrderDeliverHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Delete order by id
+ * @route         DELETE /api/v1/order/:id
+ * @access        Admin
+ */
 export const deleteOrderHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await orderServices.deleteOrderService(req.params.id);
