@@ -4,6 +4,11 @@ import { asyncHandler } from "../utils/asyncHandler";
 import { ApiResponse } from "../utils/apiResponse";
 import * as recipeService from "../services/inventory.service";
 
+/**
+ * @desc          Add pizza base
+ * @route         POST /api/v1/inventory/recipe/pizza-base
+ * @access        Admin
+ */
 export const addPizzaBaseHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.addPizzaBaseService(req.body);
@@ -11,6 +16,11 @@ export const addPizzaBaseHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update pizza base
+ * @route         PUT /api/v1/inventory/recipe/pizza-base
+ * @access        Admin
+ */
 export const updatePizzaBaseHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.updatePizzaBaseService(req.body);
@@ -18,6 +28,11 @@ export const updatePizzaBaseHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Add pizza Sauce
+ * @route         POST /api/v1/inventory/recipe/pizza-sauce
+ * @access        Admin
+ */
 export const addSauceHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.addSauceService(req.body);
@@ -25,6 +40,11 @@ export const addSauceHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update pizza Sauce
+ * @route         PUT /api/v1/inventory/recipe/pizza-sauce
+ * @access        Admin
+ */
 export const updateSauceHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.updateSauceService(req.body);
@@ -32,6 +52,11 @@ export const updateSauceHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Add pizza Cheese
+ * @route         POST /api/v1/inventory/recipe/pizza-cheese
+ * @access        Admin
+ */
 export const addCheeseHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.addCheeseService(req.body);
@@ -39,6 +64,11 @@ export const addCheeseHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update pizza Cheese
+ * @route         PUT /api/v1/inventory/recipe/pizza-cheese
+ * @access        Admin
+ */
 export const updateCheeseHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.updateCheeseService(req.body);
@@ -46,6 +76,11 @@ export const updateCheeseHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Add pizza Veggies
+ * @route         POST /api/v1/inventory/recipe/pizza-veggies
+ * @access        Admin
+ */
 export const addVeggiesHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.addVeggiesService(req.body);
@@ -53,6 +88,11 @@ export const addVeggiesHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update pizza Veggies
+ * @route         PUT /api/v1/inventory/recipe/pizza-veggies
+ * @access        Admin
+ */
 export const updateVeggiesHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.updateVeggiesService(req.body);
@@ -60,6 +100,11 @@ export const updateVeggiesHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Add pizza Non-veg
+ * @route         POST /api/v1/inventory/recipe/pizza-non-veg
+ * @access        Admin
+ */
 export const addNonVegHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.addNonVegService(req.body);
@@ -67,6 +112,11 @@ export const addNonVegHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Update pizza Non-veg
+ * @route         PUT /api/v1/inventory/recipe/pizza-non-veg
+ * @access        Admin
+ */
 export const updateNonVegHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.updateNonVegService(req.body);
@@ -74,6 +124,11 @@ export const updateNonVegHandler = asyncHandler(
   }
 );
 
+/**
+ * @desc          Get All Recipe
+ * @route         POST /api/v1/inventory/recipe
+ * @access        Admin
+ */
 export const getAllRecipeHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.getAllRecipeService();
@@ -83,19 +138,3 @@ export const getAllRecipeHandler = asyncHandler(
     });
   }
 );
-
-// export const createRecipeHandler = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     res.status(200).json({
-//       message: "Recipe created successfully",
-//     });
-//   }
-// );
-
-// export const updateRecipeHandler = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     res.status(200).json({
-//       message: "Recipe updated successfully",
-//     });
-//   }
-// );
