@@ -31,7 +31,6 @@ export const getOrderByUserService = async (user: JwtUser) => {
     .populate({ path: "veggies", select: "_id, name" })
     .populate({ path: "nonVeg", select: "_id, name" });
 
-  console.log(data);
   if (!data) {
     throw new ApiError(404, "Orders not found");
   }
