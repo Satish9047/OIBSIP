@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/apiResponse";
 import { OrderPizza } from "../models/order.model";
-import { IOrder, Pizza } from "../interface/app.interface";
+import { IOrder, JwtUser, Pizza } from "../interface/app.interface";
 import { PizzaBase } from "../models/pizzaBase.model";
 import { Sauce } from "../models/sauce.model";
 import { Cheese } from "../models/cheese.model";
@@ -16,6 +16,22 @@ const getAllOrderService = async () => {
     .populate({ path: "cheeseType", select: "_id, name" })
     .populate({ path: "veggies", select: "_id, name" })
     .populate({ path: "nonVeg", select: "_id, name" });
+  if (!data) {
+    throw new ApiError(404, "Orders not found");
+  }
+  return data;
+};
+
+export const getOrderByUserService = async (user: JwtUser) => {
+  const data = await OrderPizza.find({ user: user.id })
+    .populate({ path: "user", select: "name email phone address" })
+    .populate({ path: "pizzaBase", select: "_id, name" })
+    .populate({ path: "sauceType", select: "_id, name" })
+    .populate({ path: "cheeseType", select: "_id, name" })
+    .populate({ path: "veggies", select: "_id, name" })
+    .populate({ path: "nonVeg", select: "_id, name" });
+
+  console.log(data);
   if (!data) {
     throw new ApiError(404, "Orders not found");
   }
