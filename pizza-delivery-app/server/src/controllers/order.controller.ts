@@ -18,6 +18,22 @@ export const getAllOrderHandler = asyncHandler(
 );
 
 /**
+ * @desc          Get order by user
+ * @route         GET /api/v1/order/user
+ * @access        User
+ */
+export const getOrderByUserHandler = asyncHandler(
+  async (req: Request & { user?: JwtUser }, res: Response) => {
+    if (!req.user) {
+      throw new ApiResponse(401, "Unauthorized");
+    }
+    const user = req.user;
+    const data = await orderServices.getOrderByUserService(user);
+    res.json(new ApiResponse(200, "Order fetched successful", data));
+  }
+);
+
+/**
  * @desc          Create Pizza Order
  * @route         POST /api/v1/order
  * @access        User
