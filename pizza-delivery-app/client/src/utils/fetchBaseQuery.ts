@@ -21,19 +21,21 @@ export const baseQueryWithAuth = async (
   });
   await mutex.waitForUnlock();
 
-  const response = await baseQuery(argv, api, extraOptions);
+  let response = await baseQuery(argv, api, extraOptions);
 
   if (response.error && response.error.status === 401) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
         const refreshResponse = (await baseQuery(
-          { url: "/auth/refresh-token", method: "GET" },
+          { url: "/auth/refresh-token", method: "GET", credentials: "include" },
           api,
           extraOptions
         )) as { data?: IResponse; error?: FetchBaseQueryError };
+        console.log(refreshResponse);
         if (refreshResponse.data?.success) {
           console.log("fetchBaseWrapper function refresh cookie successfully");
+          response = await baseQuery(argv, api, extraOptions);
         } else {
           console.log("fetchBaseWrapper function refresh cookie failed");
           api.dispatch(removeUserState());
