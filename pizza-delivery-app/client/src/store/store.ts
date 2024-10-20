@@ -3,7 +3,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "../redux/state/userSlice";
-import { apiServices } from "../redux/apiServices";
+import { apiServices } from "../redux/api/apiServices";
 
 const persistConfig = {
   key: "root",
