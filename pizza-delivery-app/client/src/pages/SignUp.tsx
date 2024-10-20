@@ -9,7 +9,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { ISignUp } from "../interface/app.interface";
 import { signUpSchema } from "../schema/signUpSchema";
-import { useSignUpMutation } from "../redux/apiServices";
+import { useSignUpMutation } from "../redux/api/apiServices";
 
 const SignUp = () => {
   const [signUp, { isLoading }] = useSignUpMutation();
