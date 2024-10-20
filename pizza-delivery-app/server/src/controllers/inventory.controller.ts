@@ -132,9 +132,6 @@ export const updateNonVegHandler = asyncHandler(
 export const getAllRecipeHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await recipeService.getAllRecipeService();
-    res.status(200).json({
-      message: "Recipe fetched successfully",
-      data,
-    });
+    res.json(new ApiResponse(200, "Recipe fetched successfully", data));
   }
 );
