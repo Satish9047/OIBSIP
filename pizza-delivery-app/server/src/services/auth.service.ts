@@ -2,6 +2,7 @@ import { User } from "../models/user.model";
 import { ApiError } from "../utils/apiResponse";
 import { ISignIn, IUser } from "../interface/app.interface";
 import { createAccessToken, createJwtToken } from "../utils/jwtToken";
+import { getRandomNumber } from "../utils/randomNumber";
 
 export const signUpService = async (
   signUpData: IUser,
@@ -23,7 +24,8 @@ export const signUpService = async (
 };
 
 export const signInService = async (signInData: ISignIn) => {
-  const user = await User.findOne({ email: signInData.email });
+  const { email } = signInData;
+  const user = await User.findOne({ email });
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -34,13 +36,21 @@ export const signInService = async (signInData: ISignIn) => {
   if (!isPasswordValid) {
     throw new ApiError(400, "Invalid password");
   }
+  const verificationCode = getRandomNumber();
+  if (!user.isVerified) {
+    await User.findOneAndUpdate(
+      { email },
+      { verificationToken: verificationCode }
+    );
+  }
+
   const { password, ...userInfo } = user.toObject();
   const { accessToken, refreshToken } = createJwtToken(
     userInfo._id.toString(),
     userInfo.email,
     userInfo.role
   );
-  return { userInfo, accessToken, refreshToken };
+  return { userInfo, accessToken, refreshToken, verificationCode };
 };
 
 export const userVerificationService = async (email: String, token: number) => {
@@ -48,7 +58,8 @@ export const userVerificationService = async (email: String, token: number) => {
   if (!userExist) {
     throw new ApiError(404, "User not found");
   }
-  if (userExist.verificationToken !== token) {
+  console.log("verify user token", token);
+  if (userExist.verificationToken?.toString() !== token.toString()) {
     throw new ApiError(400, "Invalid verification code");
   }
   const user = await User.findOneAndUpdate({ email }, { isVerified: true });
