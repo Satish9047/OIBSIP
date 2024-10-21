@@ -32,7 +32,7 @@ export const baseQueryWithAuth = async (
           api,
           extraOptions
         )) as { data?: IResponse; error?: FetchBaseQueryError };
-        console.log(refreshResponse);
+        console.log("from base query ", refreshResponse);
         if (refreshResponse.data?.success) {
           console.log("fetchBaseWrapper function refresh cookie successfully");
           response = await baseQuery(argv, api, extraOptions);
@@ -42,6 +42,7 @@ export const baseQueryWithAuth = async (
         }
       } catch (error) {
         console.log(error);
+        api.dispatch(removeUserState());
       } finally {
         release();
       }
