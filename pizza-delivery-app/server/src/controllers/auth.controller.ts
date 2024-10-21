@@ -51,8 +51,23 @@ export const signUpHandler = asyncHandler(
  */
 export const signInHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    const { userInfo, accessToken, refreshToken } =
+    const { userInfo, accessToken, refreshToken, verificationCode } =
       await authServices.signInService(req.body);
+
+    if (!userInfo.isVerified) {
+      await sendMail(
+        userInfo.email,
+        "Verification Email to Pizza Lovers",
+        `Hi, ${userInfo.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
+      );
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: appConfig.env === "production",
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 10),
+      });
+      throw new ApiError(403, "User is not verified");
+    }
     //ACCESS TOKEN
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
