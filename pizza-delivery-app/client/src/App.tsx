@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Order from "./pages/Order";
 import Pizza from "./pages/Pizza";
 import Validate from "./pages/Validate";
+import Admin from "./pages/Admin";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
         <Route path="profile" element={<Profile />}></Route>
         <Route path="order" element={<Order />}></Route>
         <Route path="pizza" element={<Pizza />}></Route>
+        <Route path="admin" element={<Admin />}></Route>
       </Route>
       <Route path="sign-in" element={<SignIn />}></Route>
       <Route path="sign-up" element={<SignUp />}></Route>
