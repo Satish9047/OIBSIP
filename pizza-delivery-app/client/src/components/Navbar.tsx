@@ -1,18 +1,31 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../store/store";
+import { addUserState, removeUserState } from "../redux/state/userSlice";
+import { useGetUserQuery } from "../redux/api/apiServices";
+import { useEffect } from "react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const user = useSelector((state: RootState) => state.user);
+  const { data } = useGetUserQuery({});
 
   useEffect(() => {
-    if (user) {
-      console.log("from navbar useEffect", user);
+    if (data?.success) {
+      dispatch(addUserState(data.data));
     }
-  }, [user]);
+  }, [data, dispatch]);
+
+  const handleSignOut = () => {
+    dispatch(removeUserState());
+    localStorage.removeItem("persist:root");
+    navigate("/sign-in");
+  };
+
   return (
     <>
       <div className="flex justify-center md:h-20">
@@ -22,9 +35,23 @@ const Navbar = () => {
               <label className="text-2xl">Super Pizza</label>
             </Link>
           </div>
-          {user.email ? (
-            <div>
-              <p>{user.email}</p>
+          {user.isVerified && (
+            <div className="flex gap-5 text-lg">
+              <Link to={"/profile"}>Profile</Link>
+              <Link to={"/order"}>Order</Link>
+              {user.isVerified && user.role === "admin" && (
+                <Link to={"/admin"}>Admin</Link>
+              )}
+            </div>
+          )}
+          {user.isVerified ? (
+            <div className="flex gap-4">
+              <p>{user.name}</p>
+              <div>
+                <button onClick={handleSignOut}>
+                  <p>Sign Out</p>
+                </button>
+              </div>
             </div>
           ) : (
             <div className="flex-row hidden gap-4 md:flex">
