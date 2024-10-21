@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import {
   IAuthResponse,
   IRecipeResponse,
+  IResponse,
   ISignIn,
   ISignUp,
 } from "../../interface/app.interface";
@@ -81,6 +82,25 @@ export const apiServices = createApi({
         data: IGetUserOrder;
       }) => error.data,
     }),
+    signOut: builder.mutation({
+      query: () => ({
+        url: "auth/sign-out",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse) => response,
+      transformErrorResponse: (error: { status: number; data: IResponse }) =>
+        error.data,
+    }),
+    verifyUser: builder.mutation({
+      query: (verificationCode) => ({
+        url: "auth/verify-user",
+        method: "POST",
+        body: verificationCode,
+      }),
+      transformResponse: (response: IResponse) => response,
+      transformErrorResponse: (error: { status: number; data: IResponse }) =>
+        error.data,
+    }),
   }),
 });
 
@@ -91,4 +111,6 @@ export const {
   useGetAllRecipeQuery,
   useGetUserQuery,
   useGetUserOrderQuery,
+  useSignOutMutation,
+  useVerifyUserMutation,
 } = apiServices;
