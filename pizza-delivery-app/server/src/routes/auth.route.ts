@@ -19,6 +19,6 @@ authRouter.post("/sign-in", validateData(signInSchema), signInHandler);
 authRouter.get("/me", verifyToken, getMeHandler);
 authRouter.post("/verify-user", verifyToken, verificationHandler);
 authRouter.get("/refresh-token", verifyRefreshToken, refreshTokenHandler);
-authRouter.get("/logout", verifyToken, logoutHandler);
+authRouter.get("/sign-out", verifyToken, logoutHandler);
 
 export { authRouter };
