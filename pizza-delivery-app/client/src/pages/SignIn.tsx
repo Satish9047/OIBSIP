@@ -34,9 +34,21 @@ const SignIn = () => {
         dispatch(addUserState(signInResponse.data));
         navigate("/");
       }
+      if ("status" in signInResponse && signInResponse.status === 403) {
+        navigate("/validate");
+      }
       toast.success(signInResponse.message);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Sign In failed:", error);
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        error.status === 403
+      ) {
+        console.log("going to verifyUser");
+        navigate("/validate");
+      }
 
       if (typeof error === "object" && error !== null && "message" in error) {
         toast.error((error as { message: string }).message);
