@@ -6,13 +6,35 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "../components/ui/input-otp";
+import { useVerifyUserMutation } from "../redux/api/apiServices";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Validate = () => {
+  const navigate = useNavigate();
+  const [verifyUser, { isLoading }] = useVerifyUserMutation();
+
   const [otpValue, setOtpValue] = useState("");
 
-  const handleSubmit = () => {
-    console.log("this is otpValue", otpValue);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    console.log("OTP value:", typeof otpValue);
+    try {
+      const response = await verifyUser({ verificationCode: otpValue });
+      console.log("Verification response:", response.data);
+      if (response.data?.success) {
+        console.log("Verification successful");
+        navigate("/sign-in");
+      } else {
+        console.log("Verification failed");
+        toast.error("Verification failed");
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+    }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col max-w-2xl p-8 shadow-lg">
@@ -48,7 +70,7 @@ const Validate = () => {
             className="bg-orange-500 hover:bg-orange-800"
             onClick={handleSubmit}
           >
-            Submit
+            {isLoading ? "Loading..." : "Submit"}
           </Button>
         </div>
       </div>
