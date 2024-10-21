@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 
 import { asyncHandler } from "../utils/asyncHandler";
-import { JwtUser } from "../interface/app.interface";
 import * as userServices from "../services/user.service";
-import { JwtPayload } from "jsonwebtoken";
-import { ApiError } from "../utils/apiResponse";
+import { ApiError, ApiResponse } from "../utils/apiResponse";
 
 /**
  * @desc          Get user details
@@ -21,6 +19,6 @@ export const getUserHandler = asyncHandler(
       throw new ApiError(401, "Unauthorized access");
     }
     const data = await userServices.getUserService(user.id);
-    res.json({ user, data });
+    res.json(new ApiResponse(200, "user is Valid", data));
   }
 );
