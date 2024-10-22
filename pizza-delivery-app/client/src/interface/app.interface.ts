@@ -42,11 +42,11 @@ export interface IRecipe {
 }
 
 export interface IPizzaRecipe {
-  pizzaBase: IPizzaRecipeType[];
-  sauce: IPizzaRecipeType[];
-  cheese: IPizzaRecipeType[];
-  veggies: IPizzaRecipeType[];
-  nonVeg: IPizzaRecipeType[];
+  pizzaBase: IRecipe[];
+  sauce: IRecipe[];
+  cheese: IRecipe[];
+  veggies: IRecipe[];
+  nonVeg: IRecipe[];
 }
 
 export interface IPizzaRecipeType {
