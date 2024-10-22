@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -10,9 +10,27 @@ import { orderSchema } from "../schema/orderSchema";
 import { useForm } from "react-hook-form";
 
 type PizzaOrderFormData = z.infer<typeof orderSchema>;
+interface IBill {
+  basePrice: number;
+  saucePrice: number;
+  cheesePrice: number;
+  veggiesPrice: number;
+  nonVegPrice: number;
+  deliveryCharge: number;
+  totalPrice: number;
+}
 
 function Order() {
   const { data } = useGetAllRecipeQuery({});
+  const [bill, setBill] = useState<IBill>({
+    basePrice: 0,
+    saucePrice: 0,
+    cheesePrice: 0,
+    veggiesPrice: 0,
+    nonVegPrice: 0,
+    deliveryCharge: 50,
+    totalPrice: 0,
+  });
   const [orderPizza, setOrderPizza] = useState<PizzaOrderFormData | null>(null);
 
   const {
@@ -21,14 +39,51 @@ function Order() {
     formState: { errors },
   } = useForm<PizzaOrderFormData>({ resolver: zodResolver(orderSchema) });
 
+  // Calculate bill after the form is submitted
+  useEffect(() => {
+    if (orderPizza) {
+      const basePrice =
+        data?.data.pizzaBase.find((item) => item._id === orderPizza.pizzaBaseId)
+          ?.price || 0;
+      const saucePrice =
+        data?.data.sauce.find((item) => item._id === orderPizza.pizzaSauceId)
+          ?.price || 0;
+      const cheesePrice =
+        data?.data.cheese.find((item) => item._id === orderPizza.pizzaCheeseId)
+          ?.price || 0;
+      const veggiesPrice =
+        data?.data.veggies
+          .filter((item) => orderPizza.pizzaVeggiesIds.includes(item._id))
+          .reduce((acc, item) => acc + item.price, 0) || 0;
+      const nonVegPrice =
+        data?.data.nonVeg
+          .filter((item) => orderPizza.pizzaNonVegIds.includes(item._id))
+          .reduce((acc, item) => acc + item.price, 0) || 0;
+
+      const totalPrice =
+        (basePrice + saucePrice + cheesePrice + veggiesPrice + nonVegPrice) *
+          parseInt(orderPizza.quantity) +
+        bill.deliveryCharge;
+
+      setBill({
+        basePrice: basePrice * parseInt(orderPizza.quantity),
+        saucePrice: saucePrice * parseInt(orderPizza.quantity),
+        cheesePrice: cheesePrice * parseInt(orderPizza.quantity),
+        veggiesPrice: veggiesPrice * parseInt(orderPizza.quantity),
+        nonVegPrice: nonVegPrice * parseInt(orderPizza.quantity),
+        deliveryCharge: bill.deliveryCharge,
+        totalPrice,
+      });
+    }
+  }, [orderPizza, data, bill.deliveryCharge]);
   if (!data || !data.data) {
     return null;
   }
+
   const { pizzaBase, sauce, cheese, veggies, nonVeg }: IPizzaRecipe = data.data;
 
   const onSubmit = (formData: PizzaOrderFormData) => {
     setOrderPizza(formData);
-    console.log("order pizza ", orderPizza);
     console.log("pizza order submitted:", formData);
   };
 
@@ -87,7 +142,7 @@ function Order() {
               </div>
               <div>
                 <label htmlFor="">Quantity</label>
-                <input type="phone" {...register("quantity")} />
+                <input type="number" {...register("quantity")} />
                 {errors.quantity && (
                   <p className="text-red-500">{errors.quantity.message}</p>
                 )}
@@ -100,8 +155,38 @@ function Order() {
             </form>
           </aside>
           <aside className="md:w-4/12">
-            <div>
+            <div className="p-6">
               <h3>Your Bill</h3>
+              <div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Pizza Base</label>
+                  <p>{bill.basePrice}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Sauce</label>
+                  <p>{bill.saucePrice}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Cheese</label>
+                  <p>{bill.cheesePrice}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Veggies</label>
+                  <p>{bill.veggiesPrice}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>NonVeg</label>
+                  <p>{bill.nonVegPrice}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Delivery Charge</label>
+                  <p>{bill.deliveryCharge}</p>
+                </div>
+                <div className="flex flex-row items-center justify-between">
+                  <label>Total Price</label>
+                  <p>{bill.totalPrice}</p>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
