@@ -32,7 +32,7 @@ const SignIn = () => {
       console.log("Sign Up successful:", signInResponse);
       if (signInResponse.success && signInResponse.data) {
         dispatch(addUserState(signInResponse.data));
-        navigate("/");
+        navigate("/user/dashboard");
       }
       if ("status" in signInResponse && signInResponse.status === 403) {
         navigate("/validate");
