@@ -26,7 +26,7 @@ const Profile = () => {
 
   console.log("from profile", data?.data);
   return (
-    <div className="flex flex-col items-center  gap-5 w-11/12 min-h-[calc(100vh-5rem)] mx-auto">
+    <div className="flex flex-col items-center md:w-11/12 gap-5 min-h-[calc(100vh-5rem)] mx-auto ">
       <div className="w-full p-4">
         <h2>My Profile</h2>
       </div>
