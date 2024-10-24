@@ -13,16 +13,21 @@ import Order from "./pages/Order";
 import Pizza from "./pages/Pizza";
 import Validate from "./pages/Validate";
 import Admin from "./pages/Admin";
+import Sidebar from "./components/Sidebar";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<Navbar />}>
         <Route path="/" element={<Home />}></Route>
-        <Route path="profile" element={<Profile />}></Route>
-        <Route path="order" element={<Order />}></Route>
-        <Route path="pizza" element={<Pizza />}></Route>
-        <Route path="admin" element={<Admin />}></Route>
+        <Route path="user" element={<Sidebar />}>
+          <Route path="dashboard" element={<Dashboard />}></Route>
+          <Route path="profile" element={<Profile />}></Route>
+          <Route path="order" element={<Order />}></Route>
+          <Route path="pizza" element={<Pizza />}></Route>
+          <Route path="admin" element={<Admin />}></Route>
+        </Route>
       </Route>
       <Route path="sign-in" element={<SignIn />}></Route>
       <Route path="sign-up" element={<SignUp />}></Route>
