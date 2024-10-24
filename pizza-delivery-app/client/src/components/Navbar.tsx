@@ -35,15 +35,7 @@ const Navbar = () => {
               <label className="text-2xl">Super Pizza</label>
             </Link>
           </div>
-          {user.isVerified && (
-            <div className="flex gap-5 text-lg">
-              <Link to={"/profile"}>Profile</Link>
-              <Link to={"/order"}>Order</Link>
-              {user.isVerified && user.role === "admin" && (
-                <Link to={"/admin"}>Admin</Link>
-              )}
-            </div>
-          )}
+
           {user.isVerified ? (
             <div className="flex gap-4">
               <p>{user.name}</p>
