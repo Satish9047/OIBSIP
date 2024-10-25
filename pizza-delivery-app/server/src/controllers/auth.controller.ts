@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 
+import { JwtPayload } from "jsonwebtoken";
 import { sendMail } from "../utils/nodemailer";
-import { ApiError, ApiResponse } from "../utils/apiResponse";
+import { appConfig } from "../configs/app.config";
+import { JwtUser } from "../interface/app.interface";
 import { asyncHandler } from "../utils/asyncHandler";
 import { getRandomNumber } from "../utils/randomNumber";
 import * as authServices from "../services/auth.service";
-import { JwtPayload } from "jsonwebtoken";
-import { JwtUser } from "../interface/app.interface";
-import { appConfig } from "../configs/app.config";
+import { ApiError, ApiResponse } from "../utils/apiResponse";
 
 /**
  * @desc          Sign up a new user
@@ -157,12 +157,65 @@ export const getMeHandler = asyncHandler(
  */
 export const logoutHandler = asyncHandler(
   async (req: Request & { user?: JwtUser }, res: Response) => {
-    const user = req.user;
-    if (!user) {
-      throw new ApiError(401, "Unauthorized Request");
+    if (!req.user) {
+      res.status(200).json(new ApiResponse(200, "User already logged out"));
+      return;
     }
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
-    res.json(new ApiResponse(200, "User logged out successful"));
+
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: appConfig.env === "production",
+      path: "/",
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: appConfig.env === "production",
+      path: "/api/v1/auth/refresh-token",
+    });
+
+    res.status(200).json(new ApiResponse(200, "User logged out successfully"));
+  }
+);
+
+/**
+ * @desc          Forgot password
+ * @route         POST /api/v1/auth/forget-password
+ * @access        User | Admin
+ */
+export const forgotPasswordHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { email } = req.body;
+    if (!email) {
+      throw new ApiError(400, "Email is required");
+    }
+    const { userInfo, resetLink } =
+      await authServices.forgetPasswordService(email);
+    await sendMail(
+      email,
+      "Password Reset Link to Pizza Lovers",
+      `Hi, ${userInfo.name}! Please click on the link below to reset your password.
+      ${resetLink}`
+    );
+    res.json(new ApiResponse(200, "Password reset link sent to your email"));
+  }
+);
+
+/**
+ * @desc          Reset password
+ * @route         POST /api/v1/auth/reset-password
+ * @access        User | Admin
+ */
+export const resetPasswordHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { newPassword, resetToken } = req.body;
+    if (!newPassword || !resetToken) {
+      throw new ApiError(400, "All fields are required");
+    }
+    const { userInfo } = await authServices.resetPasswordService(
+      resetToken,
+      newPassword
+    );
+
+    res.json(new ApiResponse(200, "Password reset successful", userInfo));
   }
 );
