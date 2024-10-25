@@ -8,7 +8,6 @@ const initialState: IUser = {
   phone: "",
   address: "",
   role: "",
-  verificationToken: "",
   isVerified: false,
   createdAt: "",
   updatedAt: "",
