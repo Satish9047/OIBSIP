@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const Landing = () => {
+  const user = useSelector((state: RootState) => state.user);
+
   return (
     <div className="flex flex-col md:flex-row w-11/12 min-h-[calc(100vh-5rem)] mx-auto p-4">
       {/* <div className="flex flex-col justify-center gap-20 md:flex-row"> */}
@@ -20,34 +24,23 @@ const Landing = () => {
             </div>
             <div>
               <Button className="bg-orange-500 rounded-md hover:bg-orange-600">
-                <Link to={"/sign-in"}>Sign In for Order</Link>
+                {user.isVerified ? (
+                  <Link to={"/user/order"}>Order Pizza</Link>
+                ) : (
+                  <Link to={"/sign-in"}>Sign In for Order</Link>
+                )}
               </Button>
             </div>
             s
           </div>
         </div>
       </aside>
-      <aside className="flex order-1 w-full md:w-1/2 md:order-2">
+      <aside className="flex items-center order-1 w-full md:w-1/2 md:order-2">
         <figure className="relative ">
           <img
             src="/images/pizza1.png"
             alt="pizza"
-            className="w-10/12 mx-auto "
-          />
-          <img
-            src="/images/pizza1.png"
-            alt="pizza"
-            className="absolute w-1/6 top-20 right-12 "
-          />
-          <img
-            src="/images/pizza1.png"
-            alt="pizza"
-            className="absolute w-1/6 bottom-44 left-10 "
-          />
-          <img
-            src="/images/pizza1.png"
-            alt="pizza"
-            className="absolute w-1/6 bottom-44 right-10"
+            className="w-10/12 mx-auto"
           />
         </figure>
       </aside>
