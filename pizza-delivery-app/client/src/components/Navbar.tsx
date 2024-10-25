@@ -1,17 +1,16 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../store/store";
-import { addUserState, removeUserState } from "../redux/state/userSlice";
+import { addUserState } from "../redux/state/userSlice";
 import { useGetUserQuery } from "../redux/api/apiServices";
 import { useEffect } from "react";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  const user = useSelector((state: RootState) => state.user);
   const { data } = useGetUserQuery({});
 
   useEffect(() => {
@@ -19,12 +18,6 @@ const Navbar = () => {
       dispatch(addUserState(data.data));
     }
   }, [data, dispatch]);
-
-  const handleSignOut = () => {
-    dispatch(removeUserState());
-    localStorage.removeItem("persist:root");
-    navigate("/sign-in");
-  };
 
   return (
     <>
@@ -39,11 +32,6 @@ const Navbar = () => {
           {user.isVerified ? (
             <div className="flex gap-4">
               <p>{user.name}</p>
-              <div>
-                <button onClick={handleSignOut}>
-                  <p>Sign Out</p>
-                </button>
-              </div>
             </div>
           ) : (
             <div className="flex-row hidden gap-4 md:flex">
@@ -61,4 +49,5 @@ const Navbar = () => {
     </>
   );
 };
+
 export default Navbar;
