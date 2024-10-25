@@ -1,5 +1,5 @@
 import { IOrder } from "../interface/order.Interface";
-
+import { TableBody, TableCell, TableRow } from "../components/ui/table";
 const OrderList = ({ userOrder }: { userOrder: IOrder[] }) => {
   console.log("from orderList component", userOrder);
 
@@ -16,18 +16,18 @@ const OrderList = ({ userOrder }: { userOrder: IOrder[] }) => {
   };
 
   return (
-    <tbody className="">
+    <TableBody className="">
       {userOrder?.map((item, index) => (
-        <tr className="" key={item._id}>
-          <td>{index + 1}</td>
-          <td>{item.user.name}</td>
-          <td>{`${item.isDelivered}`}</td>
-          <td>{item.quantity}</td>
-          <td>{formatDate(item.createdAt)}</td>
-          <td>{`${item.paid}`}</td>
-        </tr>
+        <TableRow className="" key={item._id}>
+          <TableCell>{index + 1}</TableCell>
+          <TableCell>{item.user.name}</TableCell>
+          <TableCell>{`${item.isDelivered}`}</TableCell>
+          <TableCell>{item.quantity}</TableCell>
+          <TableCell>{formatDate(item.createdAt)}</TableCell>
+          <TableCell>{`${item.paid}`}</TableCell>
+        </TableRow>
       ))}
-    </tbody>
+    </TableBody>
   );
 };
 
