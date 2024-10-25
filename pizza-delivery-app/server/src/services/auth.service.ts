@@ -1,8 +1,14 @@
+import jwt from "jsonwebtoken";
+import {
+  createAccessToken,
+  createJwtToken,
+  resetPasswordToken,
+} from "../utils/jwtToken";
 import { User } from "../models/user.model";
 import { ApiError } from "../utils/apiResponse";
-import { ISignIn, IUser } from "../interface/app.interface";
-import { createAccessToken, createJwtToken } from "../utils/jwtToken";
+import { appConfig } from "../configs/app.config";
 import { getRandomNumber } from "../utils/randomNumber";
+import { ISignIn, IUser } from "../interface/app.interface";
 
 export const signUpService = async (
   signUpData: IUser,
@@ -14,7 +20,7 @@ export const signUpService = async (
   }
   signUpData.verificationToken = verificationCode;
   const user = await User.create(signUpData);
-  const { password, ...userInfo } = user.toObject();
+  const { password, verificationToken, ...userInfo } = user.toObject();
   const { accessToken, refreshToken } = createJwtToken(
     userInfo._id.toString(),
     userInfo.email,
@@ -44,7 +50,7 @@ export const signInService = async (signInData: ISignIn) => {
     );
   }
 
-  const { password, ...userInfo } = user.toObject();
+  const { password, verificationToken, ...userInfo } = user.toObject();
   const { accessToken, refreshToken } = createJwtToken(
     userInfo._id.toString(),
     userInfo.email,
@@ -63,7 +69,11 @@ export const userVerificationService = async (email: String, token: number) => {
     throw new ApiError(400, "Invalid verification code");
   }
   const user = await User.findOneAndUpdate({ email }, { isVerified: true });
-  return user;
+  if (!user) {
+    throw new ApiError(404, "Failed to verify user");
+  }
+  const { password, verificationToken, ...userInfo } = user.toObject();
+  return userInfo;
 };
 
 export const refreshTokenService = async (email: string) => {
@@ -71,7 +81,7 @@ export const refreshTokenService = async (email: string) => {
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  const { password, ...userInfo } = user.toObject();
+  const { password, verificationToken, ...userInfo } = user.toObject();
   const accessToken = createAccessToken(
     userInfo._id.toString(),
     userInfo.email,
@@ -94,4 +104,40 @@ export const verifyAdminService = async (id: string) => {
   } catch (error) {
     return null;
   }
+};
+
+export const forgetPasswordService = async (email: string) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const { password, verificationToken, ...userInfo } = user.toObject();
+  const resetToken = resetPasswordToken(user._id.toString(), user.email);
+  const resetLink = `${appConfig.clientUrl}/reset-password/${user._id.toString()}/${resetToken}`;
+
+  return { userInfo, resetLink };
+};
+
+export const resetPasswordService = async (
+  token: string,
+  newPassword: string
+) => {
+  const decode = jwt.verify(token, appConfig.accessJwtSecret) as jwt.JwtPayload;
+  if (!decode) {
+    throw new ApiError(400, "Invalid token");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    {
+      _id: decode.id,
+    },
+    {
+      password: newPassword,
+    }
+  );
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const { password, verificationToken, ...userInfo } = user.toObject();
+  return { userInfo };
 };
