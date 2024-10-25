@@ -4,27 +4,37 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
-import Profile from "./pages/Profile";
 import Order from "./pages/Order";
 import Pizza from "./pages/Pizza";
-import Validate from "./pages/Validate";
 import Admin from "./pages/Admin";
-import Sidebar from "./components/Sidebar";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import Validate from "./pages/Validate";
+import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
+import Sidebar from "./components/Sidebar";
+import ResetPassword from "./pages/ResetPassword";
+import ForgetPassword from "./pages/ForgetPassword";
+import YourOrder from "./pages/YourOrder";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<Navbar />}>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/forgot-password" element={<ForgetPassword />}></Route>
+        <Route
+          path="/reset-password/:userId/:token"
+          element={<ResetPassword />}
+        ></Route>
         <Route path="user" element={<Sidebar />}>
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="profile" element={<Profile />}></Route>
+
           <Route path="order" element={<Order />}></Route>
+          <Route path="your-orders" element={<YourOrder />}></Route>
           <Route path="pizza" element={<Pizza />}></Route>
           <Route path="admin" element={<Admin />}></Route>
         </Route>
