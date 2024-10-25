@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 import { appConfig } from "../configs/app.config";
 
 export const createJwtToken = (id: string, email: string, role: string) => {
@@ -20,4 +21,11 @@ export const createAccessToken = (id: string, email: string, role: string) => {
     expiresIn: "10min",
   });
   return accessToken;
+};
+
+export const resetPasswordToken = (id: string, email: string) => {
+  const resetToken = jwt.sign({ id, email }, appConfig.accessJwtSecret, {
+    expiresIn: "10min",
+  });
+  return resetToken;
 };
