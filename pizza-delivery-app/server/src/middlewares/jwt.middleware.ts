@@ -15,7 +15,6 @@ const verifyToken = async (
   next: NextFunction
 ) => {
   const token = req.cookies?.accessToken;
-  console.log("from token verify", req.cookies);
 
   if (!token) {
     return next(new ApiError(401, "Unauthorized"));
