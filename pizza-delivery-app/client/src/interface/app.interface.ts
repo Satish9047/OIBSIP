@@ -5,7 +5,6 @@ export interface IUser {
   phone: string;
   address: string;
   role: string;
-  verificationToken: string;
   isVerified: boolean;
   _v: number;
   createdAt: string;
