@@ -13,7 +13,7 @@ export interface IUser {
   address: string;
   role?: string;
   verificationToken?: number;
-  isVerified?: boolean;
+  isVerified: boolean;
   password: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -38,8 +38,8 @@ export interface Pizza {
   nonVeg: typeof NonVeg;
   quantity: number;
   isDelivered: boolean;
-  paid?: boolean;
-  price?: number;
+  paid: boolean;
+  price: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -51,5 +51,5 @@ export interface IOrder {
   pizzaVeggiesIds: string;
   pizzaNonVegIds: string;
   quantity: number;
-  paid?: boolean;
+  paid: boolean;
 }
