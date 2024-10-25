@@ -120,6 +120,13 @@ const SignIn = () => {
                   {isLoading ? "Loading..." : "Sign In"}
                 </Button>
               </div>
+              <div>
+                <p>
+                  <Link to={"/forgot-password"}>
+                    Forgot Password? Click Here
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
         </form>
