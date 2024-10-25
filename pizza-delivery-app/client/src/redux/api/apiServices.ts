@@ -84,8 +84,8 @@ export const apiServices = createApi({
     }),
     signOut: builder.mutation({
       query: () => ({
-        url: "auth/sign-out",
-        method: "GET",
+        url: "/auth/sign-out",
+        method: "POST",
       }),
       transformResponse: (response: IResponse) => response,
       transformErrorResponse: (error: { status: number; data: IResponse }) =>
@@ -101,16 +101,38 @@ export const apiServices = createApi({
       transformErrorResponse: (error: { status: number; data: IResponse }) =>
         error.data,
     }),
+    forgetPassword: builder.mutation({
+      query: (email) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: email,
+      }),
+      transformResponse: (response: IResponse) => response,
+      transformErrorResponse: (error: { status: number; data: IResponse }) =>
+        error.data,
+    }),
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+      transformResponse: (response: IResponse) => response,
+      transformErrorResponse: (error: { status: number; data: IResponse }) =>
+        error.data,
+    }),
   }),
 });
 
 export const {
+  useGetMeQuery,
+  useGetUserQuery,
+  useGetAllRecipeQuery,
+  useGetUserOrderQuery,
   useSignUpMutation,
   useSignInMutation,
-  useGetMeQuery,
-  useGetAllRecipeQuery,
-  useGetUserQuery,
-  useGetUserOrderQuery,
   useSignOutMutation,
   useVerifyUserMutation,
+  useResetPasswordMutation,
+  useForgetPasswordMutation,
 } = apiServices;
