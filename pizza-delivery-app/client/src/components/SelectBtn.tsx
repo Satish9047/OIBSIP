@@ -8,24 +8,26 @@ interface SelectBtnProps {
 }
 const SelectBtn = ({ recipes, register, errors }: SelectBtnProps) => {
   return (
-    <div className="flex flex-wrap gap-6">
-      {recipes?.map((item) => (
-        <div className="py-6" key={item._id}>
-          <input
-            id={item._id}
-            {...register}
-            type="radio"
-            value={item._id}
-            className="hidden peer"
-          />
-          <label
-            htmlFor={item._id}
-            className="w-1/6 h-20 p-6 text-lg text-center bg-orange-200 peer-checked:bg-orange-500"
-          >
-            {item.name}
-          </label>
-        </div>
-      ))}
+    <div className="flex flex-col flex-wrap gap-3">
+      <div className="flex flex-wrap gap-6">
+        {recipes?.map((item) => (
+          <div className="py-6" key={item._id}>
+            <input
+              id={item._id}
+              {...register}
+              type="radio"
+              value={item._id}
+              className="hidden peer"
+            />
+            <label
+              htmlFor={item._id}
+              className="w-1/6 h-20 p-6 text-lg text-center bg-orange-200 peer-checked:bg-orange-500"
+            >
+              {item.name}
+            </label>
+          </div>
+        ))}
+      </div>
       {errors && <p className="text-red-500">{errors}</p>}
     </div>
   );
