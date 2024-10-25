@@ -14,6 +14,7 @@ interface IAppConfig {
   accessTokenCookieExpiry: number;
   refreshCookieExpiry: number;
   env: string;
+  clientUrl: string;
 }
 
 export const appConfig: IAppConfig = {
@@ -24,6 +25,7 @@ export const appConfig: IAppConfig = {
 
   // APP
   port: process.env.PORT || "3000",
+  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
 
   // BCRYPT
   saltRound: 10,
