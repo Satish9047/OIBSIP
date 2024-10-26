@@ -131,9 +131,24 @@ const deleteOrderService = async (id: string) => {
   return order;
 };
 
+const updateOrderToPaidService = async (id: string, value: number) => {
+  const order = await OrderPizza.findById({ _id: id });
+  if (!order) {
+    throw new ApiError(400, "Error while updating pizza order");
+  }
+  const paidCorrectAmount = order.price === value;
+  if (!paidCorrectAmount) throw new Error("Incorrect amount paid");
+
+  order.paid = true;
+  const updatedOrder = await order.save();
+
+  return { updatedOrder };
+};
+
 export {
   getAllOrderService,
   createOrderService,
   updateOrderDeliverService,
   deleteOrderService,
+  updateOrderToPaidService,
 };
