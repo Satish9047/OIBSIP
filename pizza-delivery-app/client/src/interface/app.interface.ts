@@ -1,3 +1,4 @@
+// interface for user state in redux
 export interface IUser {
   _id: string;
   name: string;
@@ -10,6 +11,8 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
+
+// Interface for sign up
 export interface ISignUp {
   name: string;
   email: string;
@@ -18,18 +21,29 @@ export interface ISignUp {
   password: string;
 }
 
+//Interface for sign in
 export interface ISignIn {
   email: string;
   password: string;
 }
 
+//interface for response
 export interface IAuthResponse {
-  data: IUser;
+  data: IUser | null;
   message: string;
   status: number;
   success: boolean;
 }
 
+//interface for inventory
+export interface IPizzaRecipeType {
+  data: IRecipe;
+  message: string;
+  status: number;
+  success: boolean;
+}
+
+//interface for each recipe
 export interface IRecipe {
   _id: string;
   name: string;
@@ -40,6 +54,14 @@ export interface IRecipe {
   __v: number;
 }
 
+//interface for user's order
+export interface IRecipeResponse {
+  data: IPizzaRecipe | null;
+  message: string;
+  status: number;
+  success: boolean;
+}
+
 export interface IPizzaRecipe {
   pizzaBase: IRecipe[];
   sauce: IRecipe[];
@@ -48,23 +70,19 @@ export interface IPizzaRecipe {
   nonVeg: IRecipe[];
 }
 
-export interface IPizzaRecipeType {
-  data: IRecipe;
-  message: string;
-  status: number;
-  success: boolean;
-}
-
-export interface IRecipeResponse {
-  data: IPizzaRecipe;
-  message: string;
-  status: number;
-  success: boolean;
-}
-
 export interface IResponse {
   data: unknown;
   message: string;
   status: number;
   success: boolean;
+}
+
+export interface IBill {
+  basePrice: number;
+  saucePrice: number;
+  cheesePrice: number;
+  veggiesPrice: number;
+  nonVegPrice: number;
+  deliveryCharge: number;
+  totalPrice: number;
 }
