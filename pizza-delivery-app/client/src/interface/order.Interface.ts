@@ -31,6 +31,14 @@ export interface INonVeg {
   name: string;
 }
 
+//Interface for order
+export interface IGetUserOrder {
+  data: IOrder[] | null;
+  message: string;
+  status: number;
+  success: boolean;
+}
+
 export interface IOrder {
   _id: string;
   user: User;
@@ -46,10 +54,4 @@ export interface IOrder {
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
-export interface IGetUserOrder {
-  data: IOrder[];
-  message: string;
-  status: number;
-  success: boolean;
 }
