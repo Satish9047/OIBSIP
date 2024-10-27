@@ -1,8 +1,6 @@
 import { IOrder } from "../interface/order.Interface";
 import { TableBody, TableCell, TableRow } from "../components/ui/table";
 const OrderList = ({ userOrder }: { userOrder: IOrder[] }) => {
-  console.log("from orderList component", userOrder);
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
@@ -20,11 +18,14 @@ const OrderList = ({ userOrder }: { userOrder: IOrder[] }) => {
       {userOrder?.map((item, index) => (
         <TableRow className="" key={item._id}>
           <TableCell>{index + 1}</TableCell>
-          <TableCell>{item.user.name}</TableCell>
-          <TableCell>{`${item.isDelivered}`}</TableCell>
+          <TableCell>
+            {item.pizzaBase.name}, {item.sauceType.name}, {item.cheeseType.name}
+            , {item.veggies[0].name}, {item.nonVeg[0].name}
+          </TableCell>
+          <TableCell>{item.isDelivered.toString()}</TableCell>
           <TableCell>{item.quantity}</TableCell>
           <TableCell>{formatDate(item.createdAt)}</TableCell>
-          <TableCell>{`${item.paid}`}</TableCell>
+          <TableCell>{item.paid.toString()}</TableCell>
         </TableRow>
       ))}
     </TableBody>
