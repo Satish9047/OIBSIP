@@ -38,7 +38,7 @@ export const apiServices = createApi({
         data: IAuthResponse;
       }) => error.data,
     }),
-    getMe: builder.query({
+    getMe: builder.query<IAuthResponse, void>({
       query: () => ({
         url: "/auth/me",
         method: "GET",
@@ -49,7 +49,7 @@ export const apiServices = createApi({
         data: IAuthResponse;
       }) => error.data,
     }),
-    getAllRecipe: builder.query({
+    getAllRecipe: builder.query<IRecipeResponse, void>({
       query: () => ({
         url: "/inventory/recipe",
         method: "GET",
@@ -60,7 +60,7 @@ export const apiServices = createApi({
         data: IRecipeResponse;
       }) => error.data,
     }),
-    getUser: builder.query({
+    getUser: builder.query<IAuthResponse, void>({
       query: () => ({
         url: "/users",
         method: "GET",
@@ -71,7 +71,7 @@ export const apiServices = createApi({
         data: IAuthResponse;
       }) => error.data,
     }),
-    getUserOrder: builder.query({
+    getUserOrder: builder.query<IGetUserOrder, void>({
       query: () => ({
         url: "/order/user",
         method: "GET",
@@ -82,7 +82,7 @@ export const apiServices = createApi({
         data: IGetUserOrder;
       }) => error.data,
     }),
-    signOut: builder.mutation({
+    signOut: builder.mutation<IResponse, void>({
       query: () => ({
         url: "/auth/sign-out",
         method: "POST",
@@ -121,6 +121,12 @@ export const apiServices = createApi({
       transformErrorResponse: (error: { status: number; data: IResponse }) =>
         error.data,
     }),
+    getPayPalClientId: builder.query({
+      query: () => ({
+        url: "/config/paypal",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -129,6 +135,7 @@ export const {
   useGetUserQuery,
   useGetAllRecipeQuery,
   useGetUserOrderQuery,
+  useGetPayPalClientIdQuery,
   useSignUpMutation,
   useSignInMutation,
   useSignOutMutation,
