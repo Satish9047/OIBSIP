@@ -11,17 +11,17 @@ const Navbar = () => {
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  const { data } = useGetUserQuery({});
+  const { data } = useGetUserQuery();
 
   useEffect(() => {
-    if (data?.success) {
+    if (data?.success && data?.data) {
       dispatch(addUserState(data.data));
     }
   }, [data, dispatch]);
 
   return (
     <>
-      <div className="flex justify-center md:h-20">
+      <div className="flex justify-center bg-orange-300 md:h-20">
         <div className="flex items-center justify-between w-11/12 p-4 ">
           <div>
             <Link to={"/"}>
