@@ -8,6 +8,7 @@ import { asyncHandler } from "../utils/asyncHandler";
 import { getRandomNumber } from "../utils/randomNumber";
 import * as authServices from "../services/auth.service";
 import { ApiError, ApiResponse } from "../utils/apiResponse";
+import { setAccessCookies, setRefreshCookies } from "../utils/setCookie";
 
 /**
  * @desc          Sign up a new user
@@ -25,21 +26,9 @@ export const signUpHandler = asyncHandler(
       `Hi, ${userInfo.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
     );
     //ACCESS TOKEN
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: appConfig.env === "production",
-      sameSite: "none",
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 10),
-    });
+    setAccessCookies(res, accessToken);
     //REFRESH TOKEN
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: appConfig.env === "production",
-      sameSite: "none",
-      path: "/api/auth/refresh-token",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-    });
+    setRefreshCookies(res, refreshToken);
     res.json(new ApiResponse(201, "User created successful", userInfo));
   }
 );
@@ -60,28 +49,13 @@ export const signInHandler = asyncHandler(
         "Verification Email to Pizza Lovers",
         `Hi, ${userInfo.name}! Welcome to Pizza Lovers. Your verification code is ${verificationCode}.`
       );
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: appConfig.env === "production",
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 60 * 10),
-      });
+      setAccessCookies(res, accessToken);
       throw new ApiError(403, "User is not verified");
     }
     //ACCESS TOKEN
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: appConfig.env === "production",
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 10),
-    });
+    setAccessCookies(res, accessToken);
     //REFRESH TOKEN
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: appConfig.env === "production",
-      path: "/api/v1/auth/refresh-token",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-    });
+    setRefreshCookies(res, refreshToken);
     res.json(new ApiResponse(200, "User sign in successful", userInfo));
   }
 );
@@ -126,10 +100,10 @@ export const refreshTokenHandler = asyncHandler(
     //ACCESS TOKEN
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      sameSite: "none",
+      // sameSite: "none",
       secure: appConfig.env === "production",
       path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 10),
+      expires: new Date(Date.now() + appConfig.accessTokenCookieExpiry),
     });
 
     res.json(new ApiResponse(200, "Token refreshed successful", userInfo));
