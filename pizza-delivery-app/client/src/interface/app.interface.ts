@@ -84,5 +84,6 @@ export interface IBill {
   veggiesPrice: number;
   nonVegPrice: number;
   deliveryCharge: number;
+  quantity: number;
   totalPrice: number;
 }
