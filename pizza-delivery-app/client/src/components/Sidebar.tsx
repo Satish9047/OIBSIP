@@ -21,8 +21,7 @@ const Sidebar = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await signOut({}).unwrap();
-      console.log("from sidebar", res);
+      await signOut().unwrap();
       dispatch(removeUserState());
       localStorage.removeItem("persist:root");
       navigate("/sign-in");
@@ -32,34 +31,33 @@ const Sidebar = () => {
   };
   return (
     <main className="flex flex-col md:flex-row w-11/12 min-h-[calc(100vh-5rem)] mx-auto p-4">
-      <div className="flex flex-row w-full min-h-screen gap-6">
-        <aside className="md:w-2/12">
-          <div className="flex flex-col gap-6">
-            <div>
-              <h3>Panel</h3>
-            </div>
-            <div>
-              <Link to={"/user/dashboard"}>Dashboard</Link>
-            </div>
-            <div>
-              <Link to={"/user/profile"}>Profile</Link>
-            </div>
-            <div>
-              <Link to={"/user/your-orders"}>Your Orders</Link>
-            </div>
-            <div>
-              <Link to={"/user/order"}>Custom Order</Link>
-            </div>
-            {user.role === "admin" && (
-              <div className="flex flex-col gap-6">
-                <div>
-                  <Link to={"/admin/view-orders"}>Orders</Link>
-                </div>
-                <div>
-                  <Link to={"/admin/inventory"}>Inventory</Link>
-                </div>
+      <div className="flex flex-row w-full min-h-screen gap-6 ">
+        <aside className="p-4 shadow-2xl md:w-2/12 bg-zinc-100 rounded-xl">
+          <div className="flex flex-col gap-6 px-4 py-6">
+            <div className="flex flex-col gap-6 ">
+              <div>
+                <Link to={"/user/dashboard"}>Dashboard</Link>
               </div>
-            )}
+              <div>
+                <Link to={"/user/profile"}>Profile</Link>
+              </div>
+              <div>
+                <Link to={"/user/your-orders"}>Your Orders</Link>
+              </div>
+              <div>
+                <Link to={"/user/order"}>Custom Order</Link>
+              </div>
+              {user.role === "admin" && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <Link to={"/admin/view-orders"}>Orders</Link>
+                  </div>
+                  <div>
+                    <Link to={"/admin/inventory"}>Inventory</Link>
+                  </div>
+                </div>
+              )}
+            </div>
             <div>
               <Link to={"/sign-in"} onClick={handleSignOut}>
                 Sign Out
