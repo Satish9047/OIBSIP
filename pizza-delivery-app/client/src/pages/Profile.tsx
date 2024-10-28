@@ -1,9 +1,7 @@
 import { useGetUserQuery } from "../redux/api/apiServices";
 
 const Profile = () => {
-  const { data } = useGetUserQuery({});
-
-  console.log("from profile", data?.data);
+  const { data } = useGetUserQuery();
   return (
     <div className="flex flex-col items-center md:w-full gap-5 min-h-[calc(100vh-5rem)] ">
       <div className="w-full p-4">
@@ -27,15 +25,15 @@ const Profile = () => {
                   height={20}
                   alt="profile"
                 />
-                <h3>{data?.data.name}</h3>
+                <h3>{data?.data?.name}</h3>
               </div>
               <div className="flex flex-row gap-2">
                 <img src="/icon/email.svg" width={20} height={20} alt="email" />
-                <p>{data?.data.email}</p>
+                <p>{data?.data?.email}</p>
               </div>
               <div className="flex flex-row gap-2">
                 <img src="/icon/phone.svg" width={20} height={20} alt="phone" />
-                <p>{data?.data.phone}</p>
+                <p>{data?.data?.phone}</p>
               </div>
               <div className="flex flex-row gap-2">
                 <img
@@ -44,7 +42,7 @@ const Profile = () => {
                   height={20}
                   alt="location"
                 />
-                <p>{data?.data.address}</p>
+                <p>{data?.data?.address}</p>
               </div>
             </div>
           </aside>
