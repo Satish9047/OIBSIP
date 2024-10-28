@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
+import { verifyPayPalPayment, checkIfNewTransaction } from "../utils/paypal";
 
 import { asyncHandler } from "../utils/asyncHandler";
 import * as orderServices from "../services/order.service";
-import { ApiResponse } from "../utils/apiResponse";
+import { ApiError, ApiResponse } from "../utils/apiResponse";
 import { JwtUser } from "../interface/app.interface";
+import { OrderPizza } from "../models/order.model";
 
 /**
  * @desc          Get all order
@@ -73,5 +75,30 @@ export const deleteOrderHandler = asyncHandler(
   async (req: Request, res: Response) => {
     const data = await orderServices.deleteOrderService(req.params.id);
     res.json(new ApiResponse(200, "Order deleted successful", data));
+  }
+);
+
+/**
+ * @desc          Update Order to paid
+ * @route         PUT /api/v1/order/:id/pay
+ * @access        Admin
+ */
+export const updateOrderToPaidHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { verified, value } = await verifyPayPalPayment(req.body.id);
+    if (!verified) throw new ApiError(401, "Payment not verified");
+
+    const isNewTransaction = await checkIfNewTransaction(
+      OrderPizza,
+      req.body.id
+    );
+    if (!isNewTransaction)
+      throw new ApiError(400, "Transaction has been used before");
+
+    const { updatedOrder } = await orderServices.updateOrderToPaidService(
+      req.params.id,
+      value
+    );
+    res.json(new ApiResponse(200, "Order updated successful", updatedOrder));
   }
 );
