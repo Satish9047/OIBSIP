@@ -33,7 +33,8 @@ export const appConfig: IAppConfig = {
   // JWT
   accessJwtSecret: process.env.ACCESS_JWT_SECRET as string,
   refreshJwtSecret: process.env.REFRESH_JWT_SECRET as string,
-  accessTokenExpiry: "10m",
+  // accessTokenExpiry: "10m",
+  accessTokenExpiry: "10s",
   refreshTokenExpiry: "1d",
 
   // Nodemailer
@@ -41,7 +42,8 @@ export const appConfig: IAppConfig = {
   password: process.env.PASSWORD || "",
 
   // Cookie Expiry
-  accessTokenCookieExpiry: 1000 * 60 * 10,
+  // accessTokenCookieExpiry: 1000 * 60 * 10,
+  accessTokenCookieExpiry: 1000 * 10,
   refreshCookieExpiry: 1000 * 60 * 60 * 24,
 
   // Environment
