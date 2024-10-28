@@ -7,7 +7,10 @@ import {
   ISignUp,
 } from "../../interface/app.interface";
 import { baseQueryWithAuth } from "../../utils/fetchBaseQuery";
-import { IGetUserOrder } from "../../interface/order.Interface";
+import {
+  IAllOrderResponse,
+  IGetUserOrder,
+} from "../../interface/order.Interface";
 
 //Slice
 export const apiServices = createApi({
@@ -127,6 +130,17 @@ export const apiServices = createApi({
         method: "GET",
       }),
     }),
+    getAllOrders: builder.query<IAllOrderResponse, void>({
+      query: () => ({
+        url: "/order",
+        method: "GET",
+      }),
+      transformResponse: (response: IAllOrderResponse) => response,
+      transformErrorResponse: (error: {
+        status: number;
+        data: IAllOrderResponse;
+      }) => error.data,
+    }),
   }),
 });
 
@@ -136,6 +150,7 @@ export const {
   useGetAllRecipeQuery,
   useGetUserOrderQuery,
   useGetPayPalClientIdQuery,
+  useGetAllOrdersQuery,
   useSignUpMutation,
   useSignInMutation,
   useSignOutMutation,
