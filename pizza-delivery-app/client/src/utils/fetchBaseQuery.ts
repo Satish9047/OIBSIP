@@ -2,12 +2,12 @@ import {
   BaseQueryApi,
   FetchArgs,
   fetchBaseQuery,
-  FetchBaseQueryError,
+  // FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
 import { Mutex } from "async-mutex";
 
 import { removeUserState } from "../redux/state/userSlice";
-import { IResponse } from "../interface/app.interface";
+// import { IResponse } from "../interface/app.interface";
 
 const mutex = new Mutex();
 export const baseQueryWithAuth = async (
@@ -27,15 +27,17 @@ export const baseQueryWithAuth = async (
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const refreshResponse = (await baseQuery(
-          { url: "/auth/refresh-token", method: "GET", credentials: "include" },
+        const refreshResponse = await baseQuery(
+          { url: "/auth/refresh-token", method: "GET" },
           api,
           extraOptions
-        )) as { data?: IResponse; error?: FetchBaseQueryError };
+        );
         console.log("from base query ", refreshResponse);
-        if (refreshResponse.data?.success) {
+        // if (refreshResponse.data?.success) {
+        if (refreshResponse.data) {
           console.log("fetchBaseWrapper function refresh cookie successfully");
           response = await baseQuery(argv, api, extraOptions);
+          console.log("response", response);
         } else {
           console.log("fetchBaseWrapper function refresh cookie failed");
           api.dispatch(removeUserState());
@@ -47,7 +49,8 @@ export const baseQueryWithAuth = async (
         release();
       }
     } else {
-      api.dispatch(removeUserState());
+      await mutex.waitForUnlock();
+      response = await baseQuery(argv, api, extraOptions);
     }
   }
   return response;
