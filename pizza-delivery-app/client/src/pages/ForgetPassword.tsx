@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { IResponse } from "../interface/app.interface";
 import { resetPasswordSchema } from "../schema/resetPasswordSchema";
 import { useForgetPasswordMutation } from "../redux/api/apiServices";
 
@@ -24,7 +25,6 @@ const ForgetPassword = () => {
   });
 
   const onSubmit = async (formData: ForgetPassword) => {
-    console.log(formData);
     try {
       const { data } = await forgetPasswordRequest(formData);
 
@@ -32,7 +32,7 @@ const ForgetPassword = () => {
         navigate("/sign-in");
       }
     } catch (error) {
-      toast.error("An error occurred. Please try again later.");
+      toast.error((error as IResponse).message);
       console.error(error);
     } finally {
       reset();
