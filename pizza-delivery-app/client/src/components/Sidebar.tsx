@@ -50,10 +50,10 @@ const Sidebar = () => {
               {user.role === "admin" && (
                 <div className="flex flex-col gap-6">
                   <div>
-                    <Link to={"/admin/view-orders"}>Orders</Link>
+                    <Link to={"/user/all-orders"}>Request Orders</Link>
                   </div>
                   <div>
-                    <Link to={"/admin/inventory"}>Inventory</Link>
+                    <Link to={"/user/inventory"}>Inventory</Link>
                   </div>
                 </div>
               )}
