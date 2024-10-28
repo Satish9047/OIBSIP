@@ -55,3 +55,28 @@ export interface IOrder {
   updatedAt: string;
   __v: number;
 }
+
+// Order Interface
+export interface IAllOrder {
+  _id: string;
+  user: User;
+  pizzaBase: IPizzaBase;
+  sauceType: ISauceType;
+  cheeseType: ICheeseType;
+  veggies: IVeggie[];
+  nonVeg: INonVeg[];
+  quantity: number;
+  isDelivered: boolean;
+  paid: boolean;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface IAllOrderResponse {
+  data: IAllOrder[] | null;
+  message: string;
+  status: number;
+  success: boolean;
+}
