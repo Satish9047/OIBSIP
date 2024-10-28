@@ -87,3 +87,16 @@ export interface IBill {
   quantity: number;
   totalPrice: number;
 }
+
+interface PopularIngredient {
+  id: string;
+  name: string;
+}
+export interface PopularPizza {
+  name: string;
+  base: PopularIngredient;
+  sauce: PopularIngredient;
+  cheese: PopularIngredient;
+  veggies: PopularIngredient;
+  nonVeg: PopularIngredient;
+}
