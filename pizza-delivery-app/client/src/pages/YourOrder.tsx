@@ -9,7 +9,7 @@ import { useGetUserOrderQuery } from "../redux/api/apiServices";
 import { IOrder } from "../interface/order.Interface";
 
 const YourOrder = () => {
-  const { data: userOrders } = useGetUserOrderQuery({});
+  const { data: userOrders } = useGetUserOrderQuery();
   const userOrdersList: IOrder[] = userOrders?.data || [];
   return (
     <main className="w-full p-2">
@@ -24,7 +24,7 @@ const YourOrder = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>S.N.</TableHead>
-                <TableHead>Name</TableHead>
+                <TableHead>Recipe</TableHead>
                 <TableHead>Delivered</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Date</TableHead>
