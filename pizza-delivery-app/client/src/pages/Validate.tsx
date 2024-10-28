@@ -77,5 +77,4 @@ const Validate = () => {
     </div>
   );
 };
-
 export default Validate;
