@@ -37,8 +37,6 @@ const SignIn = () => {
 
       toast.success(signInResponse.message);
     } catch (error: unknown) {
-      console.error("Sign In failed:", error);
-
       if ((error as IAuthResponse).status === 403) {
         navigate("/validate");
       }
