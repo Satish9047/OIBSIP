@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { ISignUp } from "../interface/app.interface";
+import { IAuthResponse, ISignUp } from "../interface/app.interface";
 import { signUpSchema } from "../schema/signUpSchema";
 import { useSignUpMutation } from "../redux/api/apiServices";
 
@@ -25,19 +25,15 @@ const SignUp = () => {
   const onSubmit = async (data: ISignUp) => {
     try {
       const signUpResponse = await signUp(data).unwrap();
-      console.log("Sign Up successful:", signUpResponse);
       toast.success(signUpResponse.message);
       if (signUpResponse.success) {
         navigate("/validate");
       }
     } catch (error: unknown) {
-      console.error("Sign Up failed:", error);
-
-      if (typeof error === "object" && error !== null && "message" in error) {
-        toast.error((error as { message: string }).message);
-      } else {
-        toast.error("An unknown error occurred");
+      if ((error as IAuthResponse).status === 403) {
+        navigate("/validate");
       }
+      toast.error((error as IAuthResponse).message);
       reset();
     }
   };
@@ -135,14 +131,14 @@ const SignUp = () => {
                     Go to{" "}
                     <Link
                       to={"/sign-in"}
-                      className="text-blue-600 hover:font-bold"
+                      className="text-sm text-blue-500 hover:text-blue-600"
                     >
                       Sign In
                     </Link>
                   </p>
                   <Button
                     type="submit"
-                    className="bg-orange-500 rounded-md hover:bg-orange-600"
+                    className="bg-orange-300 rounded-md hover:bg-orange-400"
                   >
                     {isLoading ? "Loading ..." : "Sign Up"}
                   </Button>
