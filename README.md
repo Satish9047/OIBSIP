@@ -41,18 +41,18 @@ Welcome to the **Pizza Delivery App**! This project is a full-stack web applicat
         cd pizza-delivery-app
         
 ### Install dependencies:
-####client
+#### client
     
         cd client
         pnpm install
     
-####Server
+#### Server
     
         cd server
         pnpm install
     
-    create .env file in the root of the server folder.
-    copy all the .env.example properties and add your .end values
+create .env file in the root of the server folder.
+copy all the .env.example properties and add your .end values
     
     
 ### To Run in Development Mode
@@ -65,11 +65,15 @@ Welcome to the **Pizza Delivery App**! This project is a full-stack web applicat
         cd ..
         cd client
         pnpm dev
-    The Pizza Delivery App will start locally, allowing you to explore its features.
+The Pizza Delivery App will start locally, allowing you to explore its features.
+
+---
 
 ## Usage
    Run the application:
    Explore features: Sign up or log in to place an order. Admin users can manage menu items and track orders.
+
+---
 
 ## Contributing
    Contributions are welcome! If you have suggestions or improvements, please fork the repository and make a pull request.
@@ -79,9 +83,13 @@ Welcome to the **Pizza Delivery App**! This project is a full-stack web applicat
     Commit your changes (git commit -m 'Add some feature').
     Push to the branch (git push origin feature/YourFeature).
     Open a pull request.
+
+---
    
 ## License
    Distributed under the MIT License. See LICENSE for more information.
+
+---
 
 Happy Ordering!
 
